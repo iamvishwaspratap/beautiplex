@@ -1,0 +1,68 @@
+/* Section Styling */
+.what-we-offer-section {
+    text-align: center;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #d63384; /* Dark Pink */
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Offer Cards */
+  .offer-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  
+  .offer-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+  }
+  
+  .offer-card:hover .offer-image {
+    filter: brightness(50%);
+  }
+  
+  .offer-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .offer-card:hover .offer-overlay {
+    opacity: 1;
+  }
+  
+  .offer-overlay h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .more-btn {
+    background-color: white;
+    color: #d63384;
+    border: none;
+    padding: 8px 15px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: 0.3s;
+  }
+  
+  .more-btn:hover {
+    background-color: #d63384;
+    color: white;
+  }
+  

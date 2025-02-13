@@ -1,0 +1,134 @@
+.about-us-container {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    padding: 50px 0;
+  }
+  
+  .about-us-background {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    background-image: url('../assets/salon.jpg'); /* Replace with actual image path */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .about-us-background::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Adjust opacity here */
+  }
+  
+  .about-us-text {
+    position: relative;
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    max-width: 80%;
+    z-index: 1;
+  }
+  .about-us-heading {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #d63384; /* Adjust to match your theme */
+    margin-bottom: 20px;
+  }
+  .about-us-boxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;  
+    max-width: 1000px;  
+    margin: auto;  
+  }
+  
+  .about-us-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    flex: 0 1 calc(33.33% - 20px); 
+    max-width: 320px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  .feature-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .box-image {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  .about-us-box h3 {
+    font-size: 1.5rem;
+    color: #333;
+  }
+  
+  .about-us-box p {
+    color: #555;
+    font-size: 1rem;
+  }
+  
+  /* buttons styling */
+  .about-us-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .btn {
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .enquire-now {
+    background-color:  #d63384; /* Pink color */
+    color: white;
+    border: none;
+  }
+  
+  .enquire-now:hover {
+    background-color:  #d63384; /* Darker shade on hover */
+  }
+  
+  .know-more {
+    background-color: white;
+    color:  #d63384;
+    border: 2px solid  #d63384;
+  }
+  
+  .know-more:hover {
+    background-color:  #d63384;
+    color: white;
+  }
+  
+  @media (max-width: 768px) {
+    .about-us-boxes {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .about-us-boxes {
+      grid-template-columns: 1fr;
+    }
+  }
+  
