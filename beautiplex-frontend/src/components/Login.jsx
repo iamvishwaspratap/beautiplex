@@ -29,8 +29,13 @@ const LoginModal = ({ show, handleClose, showRegister }) => {
         alert("Login successful");
         localStorage.setItem("userEmail", user.email); // Store email in local storage
         localStorage.setItem("userName", response.data.name); // Store user name in local storage
+        localStorage.setItem("userRole", user.role); // Store user role in local storage
         handleClose(); // Close the login modal
-        navigate("/"); // Redirect to home page
+        if (user.role === "shop_owner") {
+          navigate("/owner-dashboard"); // Redirect to OwnerDashboard
+        } else {
+          navigate("/"); // Redirect to home page for other roles
+        }
       })
       .catch(() => {
         setError("Invalid email or password");

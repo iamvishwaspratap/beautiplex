@@ -9,6 +9,7 @@ const Navbar = ({ setShowLoginModal, setShowRegisterModal }) => {
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem("userEmail"); // Check if user is logged in
   const userName = localStorage.getItem("userName"); // Assuming user name is stored in local storage after login
+  const userRole = localStorage.getItem("userRole"); // Assuming user role is stored in local storage after login
   const userInitials = userName ? userName.split(' ').map(name => name[0]).join('') : '';
 
   // toggle function
@@ -30,6 +31,7 @@ const Navbar = ({ setShowLoginModal, setShowRegisterModal }) => {
   const handleLogout = () => {
     localStorage.removeItem("userEmail"); // Remove user email from local storage
     localStorage.removeItem("userName"); // Remove user name from local storage
+    localStorage.removeItem("userRole"); // Remove user role from local storage
     navigate("/"); // Redirect to home page
   };
 
@@ -77,11 +79,16 @@ const Navbar = ({ setShowLoginModal, setShowRegisterModal }) => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => navigate("/customer-dashboard")}>Customer Dashboard</Dropdown.Item>
+                  {userRole === "customer" && (
+                    <Dropdown.Item onClick={() => navigate("/customer-dashboard")}>Customer Dashboard</Dropdown.Item>
+                  )}
+                  {userRole === "shop_owner" && (
+                    <Dropdown.Item onClick={() => navigate("/owner-dashboard")}>Owner Dashboard</Dropdown.Item>
+                  )}
                   <Dropdown.Item onClick={() => navigate("/bookings")}>Bookings</Dropdown.Item>
                   <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                   <Dropdown.Item>
-                    <button className="btn btn-outline-dark" onClick={toggleMode}>
+                    <button className="btn btn-outline-dark w-100" onClick={toggleMode}>
                       {darkMode ? "Light Mode ☀️" : "Dark Mode 🌙"}
                     </button>
                   </Dropdown.Item>

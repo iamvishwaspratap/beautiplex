@@ -22,4 +22,8 @@ public class SalonService {
     public Salon addSalon(Salon salon) {
         return salonRepository.save(salon);
     }
+
+    public List<Salon> findSalonsByOwnerId(Long ownerId) {
+        return salonRepository.findByOwnerId(ownerId);
+    }
 }

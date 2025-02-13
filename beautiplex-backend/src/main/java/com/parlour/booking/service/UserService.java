@@ -46,6 +46,11 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
+    public User findUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
     @Transactional
     public User updateUserProfile(Long userId, User updatedUser) {
         User user = userRepository.findById(userId)

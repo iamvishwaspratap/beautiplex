@@ -12,6 +12,7 @@ import ContactUs from "./components/Contactus";
 import ForgotPassword from "./components/ForgotPassword";
 import AddSalon from "./components/AddSalon"; // Import AddSalon
 import CustomerDashboard from "./components/CustomerDashboard"; // Import CustomerDashboard
+import OwnerDashboard from "./components/OwnerDashboard"; // Import OwnerDashboard
 
 const HomePage = () => {
   return (
@@ -45,6 +46,7 @@ const App = () => {
         <Route path="/bookings" element={<CustomerDashboard />} /> {/* Display CustomerDashboard for bookings */}
         <Route path="/add-salon" element={<AddSalon />} /> {/* Add route for AddSalon */}
         <Route path="/customer-dashboard" element={<CustomerDashboard />} /> {/* Add route for CustomerDashboard */}
+        <Route path="/owner-dashboard" element={<OwnerDashboard />} /> {/* Add route for OwnerDashboard */}
       </Routes>
       <Footer /> {/* Footer at bottom */}
       {/* Login and Register Modals */}

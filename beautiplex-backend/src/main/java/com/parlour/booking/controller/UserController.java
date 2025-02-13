@@ -35,7 +35,6 @@ public class UserController {
         User user = userService.findUserByEmail(email);
         return ResponseEntity.ok(user);	
     }
-    
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUserProfile(@PathVariable Long id, @Valid @RequestBody User user) {
