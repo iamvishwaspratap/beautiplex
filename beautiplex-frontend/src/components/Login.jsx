@@ -9,11 +9,11 @@ const LoginModal = ({ show, handleClose, showRegister }) => {
   const [user, setUser] = useState({
     email: "",
     password: "",
-    role: "customer", // Default role
+    role: "Customer",
   });
 
   const [error, setError] = useState("");
-  const [showForgotModal, setShowForgotModal] = useState(false); // Manage forgot password modal visibility
+  const [showForgotModal, setShowForgotModal] = useState(false); 
   const navigate = useNavigate();
 
   const handleChange = (e) => {

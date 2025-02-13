@@ -35,7 +35,7 @@ const CustomerDashboard = () => {
           <Card>
             <Card.Header>User Details</Card.Header>
             <ListGroup variant="flush">
-              <ListGroup.Item>Name: {user.name}</ListGroup.Item>
+              <ListGroup.Item>Name of user: {user.name}</ListGroup.Item>
               <ListGroup.Item>Email: {user.email}</ListGroup.Item>
               <ListGroup.Item>Role: {user.role}</ListGroup.Item>
             </ListGroup>
