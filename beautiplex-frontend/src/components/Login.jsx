@@ -9,7 +9,7 @@ const LoginModal = ({ show, handleClose, showRegister }) => {
   const [user, setUser] = useState({
     email: "",
     password: "",
-    role: "Customer",
+    role: "customer",
   });
 
   const [error, setError] = useState("");
