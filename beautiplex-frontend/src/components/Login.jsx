@@ -33,6 +33,8 @@ const LoginModal = ({ show, handleClose, showRegister }) => {
         handleClose(); // Close the login modal
         if (user.role === "shop_owner") {
           navigate("/owner-dashboard"); // Redirect to OwnerDashboard
+        } else if (user.role === "admin") {
+          navigate("/admin-dashboard"); // Redirect to AdminDashboard
         } else {
           navigate("/"); // Redirect to home page for other roles
         }
