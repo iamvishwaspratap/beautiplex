@@ -1,55 +1,75 @@
 package com.parlour.booking.model;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "services")
-public class Service {
+public class ServiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
-    private String address;
-    private String category;
+    private double price;
 
-    public Service() {}
+    @ManyToOne
+    @JoinColumn(name = "salon_id", nullable = false)
+    @JsonIgnore  // Prevent infinite recursion
+    private Salon salon;
+    
+    
 
-    public Service(String name, String address, String category) {
-        this.name = name;
-        this.address = address;
-        this.category = category;
-    }
+	public ServiceEntity() {
+		super();
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public ServiceEntity(Long id, String name, double price, Salon salon) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.salon = salon;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getAddress() {
-        return address;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+	public double getPrice() {
+		return price;
+	}
 
-    public String getCategory() {
-        return category;
-    }
+	public void setPrice(double price) {
+		this.price = price;
+	}
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
+	public Salon getSalon() {
+		return salon;
+	}
+
+	public void setSalon(Salon salon) {
+		this.salon = salon;
+	}
+
+   
 }

@@ -1,11 +1,13 @@
 package com.parlour.booking.controller;
 
-import com.parlour.booking.dto.LoginRequest;
 import com.parlour.booking.model.User;
 import com.parlour.booking.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/users")
@@ -20,43 +22,56 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody User user) {
-        User savedUser = userService.registerUser(user);
-        return ResponseEntity.ok(savedUser);
+        try {
+            return ResponseEntity.ok(userService.registerUser(user));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
-        String email = loginRequest.getEmail();
-        String password = loginRequest.getPassword();
-        String role = loginRequest.getRole();
-
-        if ("admin@gmail.com".equals(email) && "admin".equals(password) && "admin".equalsIgnoreCase(role)) {
-            User adminUser = new User();
-            adminUser.setName("Admin");
-            adminUser.setEmail(email);
-            adminUser.setRole("admin");
-            return ResponseEntity.ok(adminUser);
+    public ResponseEntity<?> loginUser(@RequestBody User user) {
+        try {
+            return ResponseEntity.ok(userService.authenticateUser(user.getEmail(), user.getPassword()));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body("Invalid email or password");
         }
-
-        User authenticatedUser = userService.authenticateUser(email, password, role);
-        return ResponseEntity.ok(authenticatedUser);
     }
-
+    
     @GetMapping("/me")
-    public ResponseEntity<?> getCurrentUser(@RequestParam String email) {
-        User user = userService.findUserByEmail(email);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<?> getUserDetails(@RequestParam String email) {
+        try {
+            User user = userService.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            return ResponseEntity.ok(user);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateUserProfile(@PathVariable Long id, @Valid @RequestBody User user) {
-        User updatedUser = userService.updateUserProfile(id, user);
-        return ResponseEntity.ok(updatedUser);
-    }
 
     @PutMapping("/change-password")
-    public ResponseEntity<?> changePasswordByEmail(@RequestParam String email, @RequestBody String newPassword) {
-        userService.changePasswordByEmail(email, newPassword);
-        return ResponseEntity.ok("Password changed successfully");
+    public ResponseEntity<?> changePassword(@Valid @RequestBody Map<String, String> request) {
+        try {
+            userService.changePassword(request.get("email"), request.get("oldPassword"), request.get("newPassword"));
+            return ResponseEntity.ok("Password changed successfully.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
+        return ResponseEntity.ok(userService.forgotPassword(request.get("email")));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
+        try {
+            userService.resetPassword(request.get("token"), request.get("newPassword"));
+            return ResponseEntity.ok("Password reset successfully!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

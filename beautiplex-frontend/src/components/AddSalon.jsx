@@ -44,14 +44,14 @@ const AddSalon = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const salonResponse = await axios.post("http://localhost:8082/api/salons", {
+      const salonResponse = await axios.post("http://localhost:8082/api/salons/add", {
         ...salon,
-        owner: { id: ownerId },
+        owner: { id: ownerId ,email: localStorage.getItem("userEmail") }
       });
       const salonId = salonResponse.data.id;
       await Promise.all(
         selectedServices.map((service) =>
-          axios.post("http://localhost:8082/api/services", {
+          axios.post("http://localhost:8082/api/salon-services", {
             name: serviceOptions.find((option) => option.category === service).name,
             category: service,
             price: parseFloat(servicePrices[service]),

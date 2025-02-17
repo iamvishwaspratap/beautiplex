@@ -1,75 +1,107 @@
 import React from "react";
+import {  Link, useNavigate } from "react-router-dom";
+import {
+ 
+  Card,
+  Button,
+  Row,
+  Col,
+} from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import '../styles/Dashboard.css';
 
 const AdminDashboard = () => {
+  const navigate = useNavigate(); // Use useNavigate hook for programmatic navigation
+
+  // Handler functions for button clicks to navigate
+  const handleUserManagement = () => navigate("/users");
+  const handleAppointments = () => navigate("/appointments");
+  const handleServices = () => navigate("/admin-services");
+  const handlePayments = () => navigate("/payments");
+
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <aside className="w-64 bg-blue-900 text-white p-5">
-        <h2 className="text-xl font-bold">Admin Panel</h2>
-        <nav className="mt-5">
+    <>
+      <div className="dashboard-container">
+        {/* Sidebar */}
+        <div className="sidebar">
+          <h5>Menu</h5>
           <ul>
-            <li className="py-2 hover:bg-blue-700 px-3 rounded cursor-pointer">Dashboard</li>
-            <li className="py-2 hover:bg-blue-700 px-3 rounded cursor-pointer">Users</li>
-            <li className="py-2 hover:bg-blue-700 px-3 rounded cursor-pointer">Shops</li>
-            <li className="py-2 hover:bg-blue-700 px-3 rounded cursor-pointer">Bookings</li>
-            <li className="py-2 hover:bg-blue-700 px-3 rounded cursor-pointer">Settings</li>
+            <li>
+              <Link className="nav-link" to="/users">
+                User Management
+              </Link>
+            </li>
+            <li>
+              <Link className="nav-link" to="/appointments">
+                Appointments
+              </Link>
+            </li>
+            <li>
+              <Link className="nav-link" to="/admin-services">
+                Services
+              </Link>
+            </li>
+            <li>
+              <Link className="nav-link" to="/payments">
+                Payments
+              </Link>
+            </li>
           </ul>
-        </nav>
-      </aside>
+        </div>
 
-      {/* Main Content */}
-      <main className="flex-1 p-6">
-        {/* Dashboard Header */}
-        <header className="flex justify-between items-center bg-white p-4 shadow-md rounded">
-          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-          <button className="bg-red-500 text-white px-4 py-2 rounded">Logout</button>
-        </header>
+        {/* Main Content */}
+        <div className="main-content">
+          <h2>Welcome Admin</h2> {/* Display Welcome Admin heading */}
 
-        {/* Stats Section */}
-        <section className="grid grid-cols-3 gap-6 mt-6">
-          <div className="bg-white p-4 shadow rounded">
-            <h3 className="text-lg font-semibold">Total Users</h3>
-            <p className="text-2xl font-bold">150</p>
-          </div>
-          <div className="bg-white p-4 shadow rounded">
-            <h3 className="text-lg font-semibold">Total Shops</h3>
-            <p className="text-2xl font-bold">30</p>
-          </div>
-          <div className="bg-white p-4 shadow rounded">
-            <h3 className="text-lg font-semibold">Total Bookings</h3>
-            <p className="text-2xl font-bold">500</p>
-          </div>
-        </section>
-
-        {/* Users Table */}
-        <section className="mt-6 bg-white p-4 shadow rounded">
-          <h2 className="text-xl font-bold mb-3">Users List</h2>
-          <table className="w-full border-collapse border border-gray-300">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="border p-2">ID</th>
-                <th className="border p-2">Name</th>
-                <th className="border p-2">Email</th>
-                <th className="border p-2">Role</th>
-                <th className="border p-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border p-2">1</td>
-                <td className="border p-2">John Doe</td>
-                <td className="border p-2">john@example.com</td>
-                <td className="border p-2">Customer</td>
-                <td className="border p-2">
-                  <button className="bg-blue-500 text-white px-2 py-1 rounded">Edit</button>
-                  <button className="bg-red-500 text-white px-2 py-1 ml-2 rounded">Delete</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </section>
-      </main>
-    </div>
+          <Row>
+            <Col md={6} lg={3}>
+              <Card className="stat-card">
+                <Card.Body>
+                  <Card.Title>Users</Card.Title>
+                  <Card.Text>1000+</Card.Text>
+                  <Button variant="primary" onClick={handleUserManagement}>
+                    Manage
+                  </Button>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col md={6} lg={3}>
+              <Card className="stat-card">
+                <Card.Body>
+                  <Card.Title>Appointments</Card.Title>
+                  <Card.Text>500+</Card.Text>
+                  <Button variant="success" onClick={handleAppointments}>
+                    View
+                  </Button>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col md={6} lg={3}>
+              <Card className="stat-card">
+                <Card.Body>
+                  <Card.Title>Services</Card.Title>
+                  <Card.Text>20+</Card.Text>
+                  <Button variant="warning" onClick={handleServices}>
+                    Edit
+                  </Button>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col md={6} lg={3}>
+              <Card className="stat-card">
+                <Card.Body>
+                  <Card.Title>Payments</Card.Title>
+                  <Card.Text>$50K+</Card.Text>
+                  <Button variant="danger" onClick={handlePayments}>
+                    Transactions
+                  </Button>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </div>
+      </div>
+    </>
   );
 };
 

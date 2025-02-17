@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 const OwnerDashboard = () => {
   const [user, setUser] = useState(null);
-  const [salons, setSalons] = useState([]);
-  const email = localStorage.getItem("userEmail"); // Assuming email is stored in local storage after login
+  const [salons, setSalons] = useState(false);
+  const email = localStorage.getItem("userEmail"); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,6 +16,7 @@ const OwnerDashboard = () => {
           params: { email },
         });
         setUser(userResponse.data);
+        localStorage.setItem("userId", userResponse.data.id);
         const salonsResponse = await axios.get(`http://localhost:8082/api/salons/owner/${userResponse.data.id}`);
         setSalons(salonsResponse.data);
       } catch (error) {
