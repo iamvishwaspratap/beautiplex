@@ -9,7 +9,7 @@ const LoginModal = ({ show, handleClose, showRegister }) => {
   const [user, setUser] = useState({
     email: "",
     password: "",
-    role: "Customer",
+    role: "customer",
   });
 
   const [error, setError] = useState("");
@@ -29,8 +29,15 @@ const LoginModal = ({ show, handleClose, showRegister }) => {
         alert("Login successful");
         localStorage.setItem("userEmail", user.email); // Store email in local storage
         localStorage.setItem("userName", response.data.name); // Store user name in local storage
+        localStorage.setItem("userRole", user.role); // Store user role in local storage
         handleClose(); // Close the login modal
-        navigate("/"); // Redirect to home page
+        if (user.role === "shop_owner") {
+          navigate("/owner-dashboard"); // Redirect to OwnerDashboard
+        } else if (user.role === "admin") {
+          navigate("/admin-dashboard"); // Redirect to AdminDashboard
+        } else {
+          navigate("/"); // Redirect to home page for other roles
+        }
       })
       .catch(() => {
         setError("Invalid email or password");

@@ -4,32 +4,22 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class LocationService {
-    private double latitude;
-    private double longitude;
+    private String address;
 
     public LocationService() {
-		super();
-	}
-
-	public LocationService(double latitude, double longitude) {
-		super();
-		this.latitude = latitude;
-		this.longitude = longitude;
-	}
-
-	public double getLatitude() {
-        return latitude;
+        super();
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public LocationService(String address) {
+        super();
+        this.address = address;
     }
 
-    public double getLongitude() {
-        return longitude;
+    public String getAddress() {
+        return address;
     }
 
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

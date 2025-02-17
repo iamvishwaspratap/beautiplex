@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Container, Row, Col, Card, ListGroup } from "react-bootstrap";
-
+import { Container, Row, Col, Card, Spinner,ListGroup } from "react-bootstrap";
+import Bookings from"./Booking";
 const CustomerDashboard = () => {
   const [user, setUser] = useState(null);
-  const [bookings, setBookings] = useState([]);
   const email = localStorage.getItem("userEmail"); // Assuming email is stored in local storage after login
 
   useEffect(() => {
@@ -14,8 +13,7 @@ const CustomerDashboard = () => {
           params: { email }
         });
         setUser(userResponse.data);
-        const bookingsResponse = await axios.get(`http://localhost:8082/api/bookings/user/${userResponse.data.id}`);
-        setBookings(bookingsResponse.data);
+        
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -25,43 +23,50 @@ const CustomerDashboard = () => {
   }, [email]);
 
   if (!user) {
-    return <p>Loading...</p>;
+    return <Spinner animation="border" className="d-block mx-auto mt-4" />;
   }
 
   return (
-    <Container>
+    <Container className="mt-4 ">
+      {/* First Half - Image & Heading Section */}
+      <Row className="align-items-center mb-4 bg-transparent" style={{ height: "300px" }}>
+        <Col md={6} className="text-center bg-transparent">
+          <img
+            src="/src/assets/Parlour.jpg"
+            alt="Dashboard"
+            className="img-fluid rounded shadow"
+            style={{ maxHeight: "250px", width: "100%", objectFit: "cover" , backgroundColor:"transparent",   }}
+          />
+        </Col>
+        <Col md={6} className="text-center">
+          <h1 className="fw-bold " style={{color:"#d63384"}}>Hii {user.name} !!</h1>
+        </Col>
+      </Row>
+
+      {/* Second Half - User Details & My Bookings */}
       <Row>
-        <Col md={4}>
-          <Card>
-            <Card.Header>User Details</Card.Header>
-            <ListGroup variant="flush">
-              <ListGroup.Item>Name of user: {user.name}</ListGroup.Item>
-              <ListGroup.Item>Email: {user.email}</ListGroup.Item>
-              <ListGroup.Item>Role: {user.role}</ListGroup.Item>
-            </ListGroup>
+        {/* User Details Section */}
+        <Col md={6}>
+          <Card className="shadow-sm p-3">
+            <Card.Header className="bg-primary text-white text-center">
+              <h5>User Details</h5>
+            </Card.Header>
+            <Card.Body>
+              <p><strong>Name:</strong> {user.name}</p>
+              <p><strong>Email:</strong> {user.email}</p>
+              <p><strong>Role:</strong> {user.role}</p>
+            </Card.Body>
           </Card>
         </Col>
-        <Col md={8}>
-          <Card>
-            <Card.Header>My Bookings</Card.Header>
-            <ListGroup variant="flush">
-              {bookings.length > 0 ? (
-                bookings.map((booking) => (
-                  <ListGroup.Item key={booking.id}>
-                    <div>Salon: {booking.salon.name}</div>
-                    <div>Address: {booking.salon.address}</div>
-                    <div>Booking Time: {new Date(booking.bookingTime).toLocaleString()}</div>
-                  </ListGroup.Item>
-                ))
-              ) : (
-                <ListGroup.Item>No bookings found.</ListGroup.Item>
-              )}
-            </ListGroup>
-          </Card>
+
+        {/* My Bookings Section */}
+        <Col md={6}>
+          <Bookings userId={user.id} /> {/* Make sure this is not duplicated */}
         </Col>
       </Row>
     </Container>
   );
 };
+
 
 export default CustomerDashboard;

@@ -19,7 +19,9 @@ public class BookingService {
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
     }
-
+    public List<Booking> findAll() {
+        return bookingRepository.findAll();
+    }
     @Transactional
     public Booking createBooking(Booking booking) {
         User user = userRepository.findByEmail(booking.getUser().getEmail())
