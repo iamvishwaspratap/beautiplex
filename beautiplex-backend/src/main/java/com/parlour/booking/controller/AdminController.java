@@ -62,7 +62,7 @@ public class AdminController {
 
     @GetMapping("/all-salons")
     public ResponseEntity<?> findAllSalons() {
-        List<Salon> salons = salonService.findAll();    //service repo err
+        List<Salon> salons = salonService.getAllSalons();    //service repo err
         if (salons.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No salons found");
         }

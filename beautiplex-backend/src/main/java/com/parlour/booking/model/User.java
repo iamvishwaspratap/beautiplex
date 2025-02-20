@@ -23,7 +23,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @NotEmpty(message = "Password is required")
     @Column(nullable = false)
     private String password;
 
