@@ -1,8 +1,6 @@
 package com.parlour.booking.service;
 
-import com.parlour.booking.model.Owner;
 import com.parlour.booking.model.User;
-import com.parlour.booking.repository.OwnerRepository;
 import com.parlour.booking.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,56 +14,43 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final OwnerRepository ownerRepository;
     private final EmailService emailService;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
-    public UserService(UserRepository userRepository, OwnerRepository ownerRepository, EmailService emailService) {
+    public UserService(UserRepository userRepository, EmailService emailService) {
         this.userRepository = userRepository;
-        this.ownerRepository = ownerRepository;
         this.emailService = emailService;
     }
-    
+
     @Transactional
     public User registerUser(User user) {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new RuntimeException("Email already exists!");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User savedUser = userRepository.save(user);
-        
-        if ("shop_owner".equalsIgnoreCase(user.getRole())) {
-            Owner owner = new Owner();
-            owner.setName(user.getName());
-            owner.setEmail(user.getEmail());
-            owner.setPassword(user.getPassword());
-            ownerRepository.save(owner);
-        }
-        return savedUser;
+        return userRepository.save(user);
     }
 
     @Transactional
-    public User authenticateUser(String email, String password) {
+    public User authenticateUser(String email, String password, String role) {
         return userRepository.findByEmail(email)
-                .filter(user -> passwordEncoder.matches(password, user.getPassword()))
-                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+                .filter(user -> passwordEncoder.matches(password, user.getPassword()) && role.equals(user.getRole()))
+                .orElseThrow(() -> new RuntimeException("Invalid email, password or role"));
     }
 
     public User findUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
+
     public List<User> findAll() {
         return userRepository.findAll();
     }
+
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
-    
+
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
@@ -74,9 +59,6 @@ public class UserService {
     public void changePassword(String email, String oldPassword, String newPassword) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
-        System.out.println("Stored Hashed Password: " + user.getPassword()); // Debug log
-        System.out.println("Old Password Entered: " + oldPassword);
 
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new RuntimeException("Old password is incorrect");
@@ -97,8 +79,8 @@ public class UserService {
         userRepository.save(user);
 
         String resetLink = "http://localhost:5173/reset-password/" + token;
-        emailService.sendEmail(user.getEmail(), "Password Reset Request", 
-                               "Click the link to reset your password: " + resetLink);
+        emailService.sendEmail(user.getEmail(), "Password Reset Request",
+                "Click the link to reset your password: " + resetLink);
 
         return "Password reset link sent to your email.";
     }
@@ -110,5 +92,19 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(newPassword));
         user.setResetToken(null);
         userRepository.save(user);
+    }
+
+    @Transactional
+    public User updateUserDetails(User user) {
+        User existingUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        existingUser.setName(user.getName());
+        existingUser.setEmail(user.getEmail());
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
+        return userRepository.save(existingUser);
     }
 }
