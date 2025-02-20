@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "../styles/HeroSection.css";
 import Slider from "./Slider";
+import LoginModal from "./Login";
+import RegisterModal from "./RegisterModal";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
   const [darkMode, setDarkMode] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Automatically detect system dark mode
@@ -19,6 +25,14 @@ const HeroSection = () => {
 
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
+
+  const handleBookAppointmentClick = () => {
+    setShowLogin(true);
+  };
+
+  const handleSalonLocatorClick = () => {
+    navigate("/services");
+  };
 
   return (
     <section
@@ -42,13 +56,14 @@ const HeroSection = () => {
 
             {/* Buttons */}
             <div className="d-flex flex-column flex-md-row gap-3 mt-3">
-              <button className="btn btn-primary btn-lg">
+              <button className="btn btn-primary btn-lg" onClick={handleBookAppointmentClick}>
                 Book Appointment
               </button>
               <button
                 className={`btn btn-lg salon-locator-btn ${
                   darkMode ? "dark-btn" : ""
                 }`}
+                onClick={handleSalonLocatorClick}
               >
                 Salon Locator
               </button>
@@ -61,6 +76,23 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
+
+      <LoginModal
+        show={showLogin}
+        handleClose={() => setShowLogin(false)}
+        showRegister={() => {
+          setShowLogin(false);
+          setShowRegister(true);
+        }}
+      />
+      <RegisterModal
+        show={showRegister}
+        handleClose={() => setShowRegister(false)}
+        showLogin={() => {
+          setShowRegister(false);
+          setShowLogin(true);
+        }}
+      />
     </section>
   );
 };

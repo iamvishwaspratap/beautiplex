@@ -1,107 +1,67 @@
-import React from "react";
-import {  Link, useNavigate } from "react-router-dom";
-import {
- 
-  Card,
-  Button,
-  Row,
-  Col,
-} from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
-import '../styles/Dashboard.css';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Container, Row, Col, Card, Spinner, Button } from 'react-bootstrap';
+import EditUserModal from './EditUserModal';
+import ChangePasswordModal from './ChangePasswordModal';
 
 const AdminDashboard = () => {
-  const navigate = useNavigate(); // Use useNavigate hook for programmatic navigation
+  const [admin, setAdmin] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
 
-  // Handler functions for button clicks to navigate
-  const handleUserManagement = () => navigate("/users");
-  const handleAppointments = () => navigate("/appointments");
-  const handleServices = () => navigate("/admin-services");
-  const handlePayments = () => navigate("/payments");
+  const email = localStorage.getItem('userEmail'); // Assuming email is stored in local storage after login
+
+  useEffect(() => {
+    const fetchAdminData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8082/api/users/me`, { params: { email } });
+        setAdmin(response.data);
+      } catch (error) {
+        console.error('Error fetching admin data:', error);
+      }
+    };
+
+    fetchAdminData();
+  }, [email]);
+
+  if (!admin) {
+    return <Spinner animation="border" className="d-block mx-auto mt-4" />;
+  }
 
   return (
-    <>
-      <div className="dashboard-container">
-        {/* Sidebar */}
-        <div className="sidebar">
-          <h5>Menu</h5>
-          <ul>
-            <li>
-              <Link className="nav-link" to="/users">
-                User Management
-              </Link>
-            </li>
-            <li>
-              <Link className="nav-link" to="/appointments">
-                Appointments
-              </Link>
-            </li>
-            <li>
-              <Link className="nav-link" to="/admin-services">
-                Services
-              </Link>
-            </li>
-            <li>
-              <Link className="nav-link" to="/payments">
-                Payments
-              </Link>
-            </li>
-          </ul>
-        </div>
+    <Container className="mt-4">
+      <Row className="align-items-center mb-4">
+        <Col md={6}>
+          <Card className="shadow-sm p-3">
+            <Card.Header className="bg-primary text-white text-center">
+              <h5>Admin Details</h5>
+            </Card.Header>
+            <Card.Body>
+              <p><strong>Name:</strong> {admin.name}</p>
+              <p><strong>Email:</strong> {admin.email}</p>
+              <Button variant="warning" onClick={() => setShowEditModal(true)}>
+                Edit Details
+              </Button>
+              <Button variant="secondary" onClick={() => setShowChangePasswordModal(true)} className="ms-2">
+                Change Password
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
 
-        {/* Main Content */}
-        <div className="main-content">
-          <h2>Welcome Admin</h2> {/* Display Welcome Admin heading */}
-
-          <Row>
-            <Col md={6} lg={3}>
-              <Card className="stat-card">
-                <Card.Body>
-                  <Card.Title>Users</Card.Title>
-                  <Card.Text>1000+</Card.Text>
-                  <Button variant="primary" onClick={handleUserManagement}>
-                    Manage
-                  </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={6} lg={3}>
-              <Card className="stat-card">
-                <Card.Body>
-                  <Card.Title>Appointments</Card.Title>
-                  <Card.Text>500+</Card.Text>
-                  <Button variant="success" onClick={handleAppointments}>
-                    View
-                  </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={6} lg={3}>
-              <Card className="stat-card">
-                <Card.Body>
-                  <Card.Title>Services</Card.Title>
-                  <Card.Text>20+</Card.Text>
-                  <Button variant="warning" onClick={handleServices}>
-                    Edit
-                  </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={6} lg={3}>
-              <Card className="stat-card">
-                <Card.Body>
-                  <Card.Title>Payments</Card.Title>
-                  <Card.Text>$50K+</Card.Text>
-                  <Button variant="danger" onClick={handlePayments}>
-                    Transactions
-                  </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </div>
-      </div>
-    </>
+      <EditUserModal
+        show={showEditModal}
+        handleClose={() => setShowEditModal(false)}
+        user={admin}
+        setUser={setAdmin}
+      />
+      <ChangePasswordModal
+        show={showChangePasswordModal}
+        handleClose={() => setShowChangePasswordModal(false)}
+        email={localStorage.getItem('userEmail')} // Ensure the latest email is used
+      />
+    </Container>
   );
 };
 
