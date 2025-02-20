@@ -1,54 +1,70 @@
 package com.parlour.booking.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "salons")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Salon {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty(message = "Name is required")
     private String name;
-    private String address;
-    private String pincode;
 
-    @ManyToOne
+    @NotEmpty(message = "Location is required")
+    private String location;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
-    private Owner owner;
+    private User owner;
 
     @OneToMany(mappedBy = "salon", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ServiceEntity> services;
+    private List<ServiceEntity> services = new ArrayList<>();
 
-    // Constructors
-    public Salon() {}
+    // Getters and Setters
 
-    public Salon(String name, String address, String pincode, Owner owner) {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
         this.name = name;
-        this.address = address;
-        this.pincode = pincode;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
         this.owner = owner;
     }
 
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public List<ServiceEntity> getServices() {
+        return services;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
-
-    public String getPincode() { return pincode; }
-    public void setPincode(String pincode) { this.pincode = pincode; }
-
-    public Owner getOwner() { return owner; }
-    public void setOwner(Owner owner) { this.owner = owner; }
-
-    public List<ServiceEntity> getServices() { return services; }
-    public void setServices(List<ServiceEntity> services) { this.services = services; }
+    public void setServices(List<ServiceEntity> services) {
+        this.services = services;
+    }
 }

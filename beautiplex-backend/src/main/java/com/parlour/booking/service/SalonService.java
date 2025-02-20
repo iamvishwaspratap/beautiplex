@@ -1,35 +1,31 @@
 package com.parlour.booking.service;
 
-import com.parlour.booking.model.Owner;
 import com.parlour.booking.model.Salon;
-import com.parlour.booking.repository.OwnerRepository;
 import com.parlour.booking.repository.SalonRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 @Service
 public class SalonService {
-    private final SalonRepository salonRepository;
-    private final OwnerRepository ownerRepository;
 
-    public SalonService(SalonRepository salonRepository, OwnerRepository ownerRepository) {
+    private final SalonRepository salonRepository;
+
+    public SalonService(SalonRepository salonRepository) {
         this.salonRepository = salonRepository;
-        this.ownerRepository = ownerRepository;
     }
 
-    public Salon saveSalon(Salon salon) {
-        Owner owner = ownerRepository.findById(salon.getOwner().getId())
-                .orElseThrow(() -> new RuntimeException("Owner ID not found"));
-
-        salon.setOwner(owner);
+    public Salon createSalon(Salon salon) {
         return salonRepository.save(salon);
     }
-    public List<Salon> findAll() { // Method added
+
+    public List<Salon> getAllSalons() {
         return salonRepository.findAll();
     }
-    public List<Salon> findByOwnerEmail(String email) {
-        return salonRepository.findByOwnerEmail(email);
+
+    public void deleteSalon(Long salonId) {
+        salonRepository.deleteById(salonId);
     }
+
+	
 }

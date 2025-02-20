@@ -1,11 +1,8 @@
 package com.parlour.booking.service;
 
 import com.parlour.booking.model.Booking;
-import com.parlour.booking.model.User;
 import com.parlour.booking.repository.BookingRepository;
-import com.parlour.booking.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,30 +10,42 @@ import java.util.List;
 public class BookingService {
 
     private final BookingRepository bookingRepository;
-    private final UserRepository userRepository;
 
-    public BookingService(BookingRepository bookingRepository, UserRepository userRepository) {
+    public BookingService(BookingRepository bookingRepository) {
         this.bookingRepository = bookingRepository;
-        this.userRepository = userRepository;
     }
-    public List<Booking> findAll() {
-        return bookingRepository.findAll();
-    }
-    @Transactional
-    public Booking createBooking(Booking booking) {
-        User user = userRepository.findByEmail(booking.getUser().getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        booking.setUser(user);
+    public Booking createBooking(Booking booking) {
         return bookingRepository.save(booking);
     }
 
     public List<Booking> getBookingsByUserId(Long userId) {
         return bookingRepository.findByUser_Id(userId);
     }
+    public List<Booking> findAll() {
+		
+		return bookingRepository.findAll();
+	}
 
-    @Transactional
     public void cancelBooking(Long bookingId) {
         bookingRepository.deleteById(bookingId);
     }
+
+    public List<Booking> getPendingBookings() {
+        return bookingRepository.findByStatus("PENDING");
+    }
+
+    public Booking approveBooking(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow();
+        booking.setStatus("APPROVED");
+        return bookingRepository.save(booking);
+    }
+
+    public Booking denyBooking(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow();
+        booking.setStatus("DENIED");
+        return bookingRepository.save(booking);
+    }
+
+	
 }
