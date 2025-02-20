@@ -1,67 +1,52 @@
 package com.parlour.booking.controller;
 
 import com.parlour.booking.model.Salon;
+import com.parlour.booking.model.ServiceEntity;
+import com.parlour.booking.model.User;
 import com.parlour.booking.repository.SalonRepository;
-import com.parlour.booking.service.SalonService;
+import com.parlour.booking.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import jakarta.validation.Valid;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/salons")
-@CrossOrigin(origins = "http://localhost:5173") 
+@CrossOrigin(origins = "http://localhost:5173")
 public class SalonController {
-    private final SalonService salonService;
-    private final SalonRepository salonRepository;
 
-    public SalonController(SalonService salonService, SalonRepository salonRepository) {
-        this.salonService = salonService;
-        this.salonRepository = salonRepository;
-    }
+    @Autowired
+    private SalonRepository salonRepository;
 
-    // Add a new salon with services
-    @PostMapping("/add")
-    public ResponseEntity<?> addSalon(@RequestBody Salon salon) {
-        System.out.println("Received Salon: " + salon); 
+    @Autowired
+    private UserRepository userRepository;
 
-        if (salon.getOwner() == null || salon.getOwner().getId() == null) { 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Owner ID is required"));
-        }
-
+    @PostMapping("/create")
+    public ResponseEntity<?> createSalon(@Valid @RequestBody Salon salonRequest) {
         try {
-            Salon savedSalon = salonService.saveSalon(salon);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedSalon);
+            // Find the owner by email
+            User owner = userRepository.findByEmail(salonRequest.getOwner().getEmail())
+                    .orElseThrow(() -> new RuntimeException("Owner not found"));
+
+            // Set the owner for the salon
+            salonRequest.setOwner(owner);
+
+            // Initialize the services list if it's null
+            if (salonRequest.getServices() == null) {
+                salonRequest.setServices(new ArrayList<>());
+            }
+
+            // Save the salon and its services
+            for (ServiceEntity service : salonRequest.getServices()) {
+                service.setSalon(salonRequest);
+            }
+            Salon newSalon = salonRepository.save(salonRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newSalon);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("message", "Failed to add salon: " + e.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
-    }
-
-    // Get all salons
-    @GetMapping("/all")
-    public List<Salon> getAllSalons() {
-        return salonRepository.findAll();
-    }
-
-    // Get salon by ID
-    @GetMapping("/owner/{userId}")
-    public ResponseEntity<List<Salon>> getSalonsByOwner(@PathVariable Long userId) {
-        List<Salon> salons = salonRepository.findByOwnerId(userId);
-        return salons.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(salons);
-    }
-
-
-    // Get salons by owner email
-    @GetMapping("/owner")
-    public ResponseEntity<?> getSalonsByOwnerEmail(@RequestParam String email) {
-        List<Salon> salons = salonRepository.findByOwnerEmail(email);
-        return salons.isEmpty()
-                ? ResponseEntity.status(HttpStatus.NO_CONTENT).body(Map.of("message", "No salons found for this owner"))
-                : ResponseEntity.ok(salons);
     }
 }

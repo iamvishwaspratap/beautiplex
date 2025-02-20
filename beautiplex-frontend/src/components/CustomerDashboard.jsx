@@ -1,72 +1,68 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Container, Row, Col, Card, Spinner,ListGroup } from "react-bootstrap";
-import Bookings from"./Booking";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Container, Row, Col, Card, Spinner, Button } from 'react-bootstrap';
+import EditUserModal from './EditUserModal';
+import ChangePasswordModal from './ChangePasswordModal';
+
 const CustomerDashboard = () => {
-  const [user, setUser] = useState(null);
-  const email = localStorage.getItem("userEmail"); // Assuming email is stored in local storage after login
+  const [customer, setCustomer] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+
+  const email = localStorage.getItem('userEmail'); // Assuming email is stored in local storage after login
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchCustomerData = async () => {
       try {
-        const userResponse = await axios.get(`http://localhost:8082/api/users/me`, {
-          params: { email }
-        });
-        setUser(userResponse.data);
-        
+        const response = await axios.get(`http://localhost:8082/api/users/me`, { params: { email } });
+        setCustomer(response.data);
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error('Error fetching customer data:', error);
       }
     };
 
-    fetchUserData();
+    fetchCustomerData();
   }, [email]);
 
-  if (!user) {
+  if (!customer) {
     return <Spinner animation="border" className="d-block mx-auto mt-4" />;
   }
 
   return (
-    <Container className="mt-4 ">
-      {/* First Half - Image & Heading Section */}
-      <Row className="align-items-center mb-4 bg-transparent" style={{ height: "300px" }}>
-        <Col md={6} className="text-center bg-transparent">
-          <img
-            src="/src/assets/Parlour.jpg"
-            alt="Dashboard"
-            className="img-fluid rounded shadow"
-            style={{ maxHeight: "250px", width: "100%", objectFit: "cover" , backgroundColor:"transparent",   }}
-          />
-        </Col>
-        <Col md={6} className="text-center">
-          <h1 className="fw-bold " style={{color:"#d63384"}}>Hii {user.name} !!</h1>
-        </Col>
-      </Row>
-
-      {/* Second Half - User Details & My Bookings */}
-      <Row>
-        {/* User Details Section */}
+    <Container className="mt-4">
+      <Row className="align-items-center mb-4">
         <Col md={6}>
           <Card className="shadow-sm p-3">
             <Card.Header className="bg-primary text-white text-center">
-              <h5>User Details</h5>
+              <h5>Customer Details</h5>
             </Card.Header>
             <Card.Body>
-              <p><strong>Name:</strong> {user.name}</p>
-              <p><strong>Email:</strong> {user.email}</p>
-              <p><strong>Role:</strong> {user.role}</p>
+              <p><strong>Name:</strong> {customer.name}</p>
+              <p><strong>Email:</strong> {customer.email}</p>
+              <Button variant="warning" onClick={() => setShowEditModal(true)}>
+                Edit Details
+              </Button>
+              <Button variant="secondary" onClick={() => setShowChangePasswordModal(true)} className="ms-2">
+                Change Password
+              </Button>
             </Card.Body>
           </Card>
         </Col>
-
-        {/* My Bookings Section */}
-        <Col md={6}>
-          <Bookings userId={user.id} /> {/* Make sure this is not duplicated */}
-        </Col>
       </Row>
+
+      <EditUserModal
+        show={showEditModal}
+        handleClose={() => setShowEditModal(false)}
+        user={customer}
+        setUser={setCustomer}
+      />
+      <ChangePasswordModal
+        show={showChangePasswordModal}
+        handleClose={() => setShowChangePasswordModal(false)}
+        email={email}
+      />
     </Container>
   );
 };
-
 
 export default CustomerDashboard;

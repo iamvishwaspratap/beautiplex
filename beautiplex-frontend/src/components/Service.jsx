@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import backgroundImage from "../assets/Parlour.jpg"; // Add your background image
 
-const ServiceSection = () => {
+const Service = () => {
   const [location, setLocation] = useState("");
   const [service, setService] = useState("");
   const [salons, setSalons] = useState([]);
@@ -79,4 +79,4 @@ const ServiceSection = () => {
   );
 };
 
-export default ServiceSection;
+export default Service;

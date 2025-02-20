@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/About.css";
 import feature1 from "../assets/feature1.jpeg";
 import feature2 from "../assets/feature2.jpg";
@@ -6,6 +6,8 @@ import feature3 from "../assets/feature3.jpg";
 import feature4 from "../assets/feature4.jpg";
 import feature5 from "../assets/feature5.jpeg";
 import feature6 from "../assets/feature6.jpeg";
+import LoginModal from "./Login";
+import RegisterModal from "./RegisterModal";
 
 const features = [
   {
@@ -41,9 +43,19 @@ const features = [
 ];
 
 const AboutUs = () => {
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+
+  const handleEnquireClick = () => {
+    setShowLogin(true);
+  };
+
+  const handleKnowMoreClick = () => {
+    setShowLogin(true);
+  };
+
   return (
     <section id="about-us" className="about-us-container">
-      {/* Background Image with Text Overlay */}
       <div className="about-us-background">
         <div className="about-us-text">
           <h1> About Us</h1>
@@ -53,7 +65,6 @@ const AboutUs = () => {
         </div>
       </div>
 
-      {/* White Box Section */}
       <div className="about-us-section">
         <h2 className="about-us-heading">The World of BeautiPlex</h2>
 
@@ -71,10 +82,31 @@ const AboutUs = () => {
           ))}
         </div>
         <div className="about-us-buttons">
-          <button className="btn enquire-now">Enquire Now</button>
-          <button className="btn know-more">Know More</button>
+          <button className="btn enquire-now" onClick={handleEnquireClick}>
+            Enquire Now
+          </button>
+          <button className="btn know-more" onClick={handleKnowMoreClick}>
+            Know More
+          </button>
         </div>
       </div>
+
+      <LoginModal
+        show={showLogin}
+        handleClose={() => setShowLogin(false)}
+        showRegister={() => {
+          setShowLogin(false);
+          setShowRegister(true);
+        }}
+      />
+      <RegisterModal
+        show={showRegister}
+        handleClose={() => setShowRegister(false)}
+        showLogin={() => {
+          setShowRegister(false);
+          setShowLogin(true);
+        }}
+      />
     </section>
   );
 };
