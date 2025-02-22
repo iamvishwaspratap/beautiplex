@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Button, Row, Col, Form } from 'react-bootstrap';
-import '../../styles/AdminService.css';
+import '../styles/AdminService.css';
 
 const AdminService = () => {
   const [services, setServices] = useState([

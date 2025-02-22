@@ -2,6 +2,7 @@ package com.parlour.booking.service;
 
 import com.parlour.booking.model.User;
 import com.parlour.booking.repository.UserRepository;
+import jakarta.validation.constraints.Null;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,8 @@ public class UserService {
 
     @Transactional
     public User registerUser(User user) {
+        System.out.println("user register started---------------------");
+        System.out.println(userRepository);
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new RuntimeException("Email already exists!");
         }
@@ -51,8 +54,18 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public User findByEmail(String email) {
+        User u =userRepository.findUserByEmail(email);
+        System.out.println(email);
+        if(u!=null) {
+            System.out.println("inside if @@@@@@@@@@");
+            return u;
+        }
+        else {
+            System.out.println("inside else-----------null case");
+            return null;
+        }
+        //return userRepository.findByEmail(email);
     }
 
     @Transactional
