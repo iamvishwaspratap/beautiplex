@@ -6,30 +6,42 @@ const MySalons = () => {
   const [salons, setSalons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [ownerEmail, setOwnerEmail] = useState(null);
+  const [ownerId, setOwnerId] = useState(null);
+  
+  useEffect(() => {
+    const id = localStorage.getItem('ownerId'); // Assuming owner ID is stored in local storage after login
+    setOwnerId(id);
+  }, []);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
-        const response = await axios.get("http://localhost:8082/api/user/me");
-        setOwnerEmail(response.data.email);
+        const currentUserResponse = await axios.get("http://localhost:8082/api/users/me", {
+          params: { id: ownerId },
+        });
+        console.log("Current user:", currentUserResponse.data.id);
+        setOwnerId(currentUserResponse.data.id);
       } catch (error) {
         console.error("Error fetching current user:", error);
         setError("Failed to load user data. Please try again.");
       }
     };
-    
-    fetchCurrentUser();
-  }, []);
+
+    if (ownerId) {
+      fetchCurrentUser();
+    }
+  }, [ownerId]);
 
   useEffect(() => {
     const fetchSalons = async () => {
+      if (!ownerId) return;
+
       try {
-        const response = await axios.get("http://localhost:8082/api/salons", {
-          params: { email: ownerEmail },
+        const response = await axios.get("http://localhost:8082/api/salons/owner", {
+          params: { id: ownerId },
         });
-        console.log(response);
         setSalons(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Error fetching salons:", error);
         setError("Failed to load salons. Please try again.");
@@ -38,10 +50,8 @@ const MySalons = () => {
       }
     };
 
-    if (ownerEmail) {
-      fetchSalons();
-    }
-  }, [ownerEmail]);
+    fetchSalons();
+  }, [ownerId]);
 
   return (
     <Container className="mt-4">

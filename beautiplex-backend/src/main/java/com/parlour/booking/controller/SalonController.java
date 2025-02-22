@@ -5,6 +5,7 @@ import com.parlour.booking.model.Salon;
 import com.parlour.booking.model.ServiceEntity;
 import com.parlour.booking.model.User;
 import com.parlour.booking.repository.SalonRepository;
+import com.parlour.booking.repository.ServiceRepository;
 import com.parlour.booking.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,8 @@ public class SalonController {
 
     @Autowired
     private SalonRepository salonRepository;
-
+    @Autowired
+    private ServiceRepository serviceRepository;
     @Autowired
     private UserRepository userRepository;
 
@@ -102,10 +104,10 @@ public ResponseEntity<?> createSalon(@Valid @RequestBody Salon salonRequest) {
     }
 }
     @GetMapping("/owner")
-    public ResponseEntity<?> getSalonsByOwner(@RequestParam Long ownerId) {
+    public ResponseEntity<?> getSalonsByOwner(@RequestParam Long id) {
         try {
             // Fetch owner by ID
-            User owner = userRepository.findById(ownerId)
+            User owner = userRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Owner not found"));
 
             // Fetch salons with services
@@ -114,7 +116,6 @@ public ResponseEntity<?> createSalon(@Valid @RequestBody Salon salonRequest) {
             return ResponseEntity.ok(salons);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-
         }
     }
 
