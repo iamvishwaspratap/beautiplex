@@ -17,6 +17,8 @@ import AdminDashboard from "./components/AdminDashboard"; // Import AdminDashboa
 import UserManagement from "./components/UserManagement";
 import Appointments from "./components/Appointment";
 import AdminService from "./components/Appointment";
+import MySalons from "./components/MySalons";
+
 
 const HomePage = () => {
   return (
@@ -55,6 +57,8 @@ const App = () => {
         <Route path="/users" element={<UserManagement />} />
         <Route path="/appointments" element={<Appointments />} />
         <Route path="/admin-services" element={<AdminService />} />
+        <Route path="/MySalons" element={<MySalons />} />
+        
       </Routes>
       <Footer /> {/* Footer at bottom */}
       {/* Login and Register Modals */}

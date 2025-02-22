@@ -44,7 +44,7 @@ const AddSalon = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const salonResponse = await axios.post("http://localhost:8082/api/salons/add", {
+      const salonResponse = await axios.post("http://localhost:8082/api/salons/create", {
         ...salon,
         owner: { id: ownerId ,email: localStorage.getItem("userEmail") }
       });

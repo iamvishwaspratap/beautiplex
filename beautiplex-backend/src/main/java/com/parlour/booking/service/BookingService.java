@@ -20,7 +20,7 @@ public class BookingService {
     }
 
     public List<Booking> getBookingsByUserId(Long userId) {
-        return bookingRepository.findByUser_Id(userId);
+        return bookingRepository.findByCustomer_Id(userId);
     }
     public List<Booking> findAll() {
 		

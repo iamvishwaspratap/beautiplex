@@ -23,17 +23,28 @@ const OwnerDashboard = () => {
   const email = localStorage.getItem('userEmail'); // Assuming email is stored in local storage after login
 
   useEffect(() => {
+    if (!email) {
+      console.error("Email is undefined!");
+      return;
+    }
+  
     const fetchOwnerData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8082/api/users/me`, { params: { email } });
+        console.log("Fetching user for email:", email);  // Debugging log
+        const response = await axios.get("http://localhost:8082/api/users/me", { 
+          params: { email } 
+        });
+  
+        console.log("API Response:", response.data);  // Debugging log
         setOwner(response.data);
       } catch (error) {
-        console.error('Error fetching owner data:', error);
+        console.error("Error fetching owner data:", error);
       }
     };
-
+  
     fetchOwnerData();
   }, [email]);
+  
 
   const handleServiceChange = (index, e) => {
     const { name, value } = e.target;
@@ -62,32 +73,48 @@ const OwnerDashboard = () => {
       .filter((service) => service.selected)
       .map((service) => ({ name: service.name, price: service.price }));
 
+    if (!owner || !owner.email) {
+      console.error("Owner information is missing!");
+      alert("Owner data is not loaded. Please try again.");
+      return;
+    }
+
     const salonData = {
       name: newSalon.name,
       location: newSalon.location,
       services: selectedServices,
-      owner: { email: owner.email }
+      owner: { email: owner.email } // ✅ Ensure the owner object is included
     };
 
+    console.log("Sending salon data:", JSON.stringify(salonData, null, 2)); // Debugging log
+
     try {
-      await axios.post('http://localhost:8082/api/salons/create', salonData);
-      alert('Salon added successfully!');
-      setShowAddSalonModal(false);
-      setNewSalon({ name: '', location: '', services: [] });
-      setServiceOptions([
-        { name: 'Hair', price: '' },
-        { name: 'Facial', price: '' },
-        { name: 'Makeup', price: '' },
-        { name: 'Spa', price: '' },
-        { name: 'Nail', price: '' },
-        { name: 'Bridal Makeup', price: '' },
-        { name: 'Skincare', price: '' },
-      ]);
+        const response = await axios.post('http://localhost:8082/api/salons/create', salonData, {
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+        console.log("Salon created successfully:", response.data);
+        
+        alert('Salon added successfully!');
+        setShowAddSalonModal(false);
+        setNewSalon({ name: '', location: '', services: [] });
+        setServiceOptions([
+            { name: 'Hair', price: '' },
+            { name: 'Facial', price: '' },
+            { name: 'Makeup', price: '' },
+            { name: 'Spa', price: '' },
+            { name: 'Nail', price: '' },
+            { name: 'Bridal Makeup', price: '' },
+            { name: 'Skincare', price: '' },
+        ]);
     } catch (error) {
-      console.error('Error adding salon:', error);
-      alert('Failed to add salon.');
+        console.error("Error adding salon:", error.response ? error.response.data : error.message);
+        alert('Failed to add salon.');
     }
-  };
+};
+
+
 
   if (!owner) {
     return <Spinner animation="border" className="d-block mx-auto mt-4" />;

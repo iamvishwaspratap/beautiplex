@@ -85,7 +85,7 @@ const Navbar = ({ setShowLoginModal, setShowRegisterModal }) => {
                   {userRole === "shop_owner" && (
                     <Dropdown.Item onClick={() => navigate("/owner-dashboard")}>Owner Dashboard</Dropdown.Item>
                   )}
-                  <Dropdown.Item onClick={() => navigate("/bookings")}>Bookings</Dropdown.Item>
+                  <Dropdown.Item onClick={() => navigate("/MySalons")}>My Salons</Dropdown.Item>
                   <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                   <Dropdown.Item>
                     <button className="btn btn-outline-dark w-100" onClick={toggleMode}>
