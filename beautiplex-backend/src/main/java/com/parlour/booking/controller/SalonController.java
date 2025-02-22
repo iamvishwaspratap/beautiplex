@@ -7,13 +7,16 @@ import com.parlour.booking.model.User;
 import com.parlour.booking.repository.SalonRepository;
 import com.parlour.booking.repository.ServiceRepository;
 import com.parlour.booking.repository.UserRepository;
+import com.parlour.booking.service.SalonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -23,6 +26,8 @@ public class SalonController {
 
     @Autowired
     private SalonRepository salonRepository;
+    @Autowired
+    private SalonService salonService;
     @Autowired
     private ServiceRepository serviceRepository;
     @Autowired
@@ -86,12 +91,12 @@ public ResponseEntity<?> createSalon(@Valid @RequestBody Salon salonRequest) {
 
         // Assign owner to the salon
         salonRequest.setOwner(owner);
-        if (salonRequest.getServices() == null) {
-            salonRequest.setServices(new ArrayList<>());
-        }
-        for (ServiceEntity service : salonRequest.getServices()) {
-            service.setSalon(salonRequest);
-        }
+//        if (salonRequest.getServices() == null) {
+//            salonRequest.setServices(new ArrayList<>());
+//        }
+//        for (ServiceEntity service : salonRequest.getServices()) {
+//            service.setSalon(salonRequest);
+//        }
 
         Salon newSalon = salonRepository.save(salonRequest);
         System.out.println("Salon Created Successfully: " + newSalon.getName());
@@ -104,20 +109,12 @@ public ResponseEntity<?> createSalon(@Valid @RequestBody Salon salonRequest) {
     }
 }
     @GetMapping("/owner")
-    public ResponseEntity<?> getSalonsByOwner(@RequestParam Long id) {
-        try {
-            // Fetch owner by ID
-            User owner = userRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Owner not found"));
-
-            // Fetch salons with services
-            List<Salon> salons = salonRepository.findByOwnerId(owner.getId());
-
-            return ResponseEntity.ok(salons);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+    public ResponseEntity<List<Salon>> getSalonsByOwner(@RequestParam Long id) {
+        List<Salon> salons = salonService.getSalonsByOwner(id);
+        return ResponseEntity.ok(salons);
     }
+
+
 
 
 

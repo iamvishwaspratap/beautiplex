@@ -9,9 +9,7 @@ import java.util.List;
 
 @Repository
 public interface SalonRepository extends JpaRepository<Salon, Long> {
-    List<Salon> findByOwnerEmail(String email);
-    List<Salon> findByOwnerId(Long id);
-    List<Salon> findByOwner(User owner);
-
-
+    List<Salon> findByOwnerId(Long ownerId);
+    
 }
+

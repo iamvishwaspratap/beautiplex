@@ -72,6 +72,7 @@
 package com.parlour.booking.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -94,11 +95,12 @@ public class Salon {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
-//    @JsonIgnore
+    @JsonBackReference
     private User owner;
 
-    @OneToMany(mappedBy = "salon", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ServiceEntity> services = new ArrayList<>();
+
+   // @OneToMany(mappedBy = "salon", cascade = CascadeType.ALL, orphanRemoval = true)
+    //private List<ServiceEntity> services = new ArrayList<>();
     @OneToMany(mappedBy = "salon", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings = new ArrayList<>();
 
@@ -138,11 +140,11 @@ public class Salon {
         this.owner = owner;
     }
 
-    public List<ServiceEntity> getServices() {
-        return services;
-    }
+   // public List<ServiceEntity> getServices() {
+//        return services;
+//    }
 
-    public void setServices(List<ServiceEntity> services) {
-        this.services = services;
-    }
+    //public void setServices(List<ServiceEntity> services) {
+//        this.services = services;
+//    }
 }

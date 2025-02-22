@@ -44,6 +44,10 @@ public class ServiceController {
         service.setPrice(updatedService.getPrice());
         return serviceRepository.save(service);
     }
+    @GetMapping("/salon/{salonId}")
+    public List<ServiceEntity> getServicesBySalonId(@PathVariable Long salonId) {
+        return serviceRepository.findBySalonId(salonId);
+    }
 
     @DeleteMapping("/{id}")
     public void deleteService(@PathVariable Long id) {
