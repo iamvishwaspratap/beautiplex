@@ -1,6 +1,6 @@
 package com.parlour.booking.controller;
 
-import com.parlour.booking.model.ParlourService;
+import com.parlour.booking.model.ServiceEntity;
 import com.parlour.booking.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,32 +15,32 @@ public class ServiceController {
     @Autowired
     private ServiceRepository serviceRepository;
 
-    @GetMapping("/search")
-    public List<ParlourService> getServicesByLocation(@RequestParam String locationName) {
-        return serviceRepository.findByAddressContaining(locationName);
-    }
+//    @GetMapping("/search")
+//    public List<ServiceEntity> getServicesByLocation(@RequestParam String locationName) {
+//        return serviceRepository.findByAddressContaining(locationName);
+//    }
 
     @PostMapping
-    public ParlourService createService(@RequestBody ParlourService service) {
+    public ServiceEntity createService(@RequestBody ServiceEntity service) {
         return serviceRepository.save(service);
     }
 
     @GetMapping
-    public List<ParlourService> getAllServices() {
+    public List<ServiceEntity> getAllServices() {
         return serviceRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public ParlourService getServiceById(@PathVariable Long id) {
+    public ServiceEntity getServiceById(@PathVariable Long id) {
         return serviceRepository.findById(id).orElseThrow(() -> new RuntimeException("Service not found!"));
     }
 
     @PutMapping("/{id}")
-    public ParlourService updateService(@PathVariable Long id, @RequestBody ParlourService updatedService) {
-        ParlourService service = serviceRepository.findById(id).orElseThrow(() -> new RuntimeException("Service not found!"));
+    public ServiceEntity updateService(@PathVariable Long id, @RequestBody ServiceEntity updatedService) {
+        ServiceEntity service = serviceRepository.findById(id).orElseThrow(() -> new RuntimeException("Service not found!"));
         service.setName(updatedService.getName());
-        service.setAddress(updatedService.getAddress());
-        service.setCategory(updatedService.getCategory());
+//        service.setAddress(updatedService.getAddress());
+//        service.setCategory(updatedService.getCategory());
         service.setPrice(updatedService.getPrice());
         return serviceRepository.save(service);
     }
