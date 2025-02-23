@@ -2,6 +2,7 @@ package com.parlour.booking.controller;
 
 import com.parlour.booking.model.ServiceEntity;
 import com.parlour.booking.repository.ServiceRepository;
+import com.parlour.booking.service.SalonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,8 @@ public class ServiceController {
 
     @Autowired
     private ServiceRepository serviceRepository;
+    @Autowired
+    private SalonService salonService;
 
 //    @GetMapping("/search")
 //    public List<ServiceEntity> getServicesByLocation(@RequestParam String locationName) {
@@ -48,5 +51,9 @@ public class ServiceController {
     @DeleteMapping("/{id}")
     public void deleteService(@PathVariable Long id) {
         serviceRepository.deleteById(id);
+    }
+    @GetMapping("/salon/{salonId}")
+    public List<ServiceEntity> getServicesBySalonId(@PathVariable Long salonId) {
+        return salonService.getServicesBySalonId(salonId);
     }
 }

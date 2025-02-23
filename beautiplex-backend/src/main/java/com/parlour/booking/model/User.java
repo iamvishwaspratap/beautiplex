@@ -66,6 +66,7 @@
 package com.parlour.booking.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -104,7 +105,8 @@ public class User {
     private String resetToken;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("owner")
+    //@JsonIgnoreProperties("owner")
+    @JsonIgnore
     private List<Salon> salons = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
