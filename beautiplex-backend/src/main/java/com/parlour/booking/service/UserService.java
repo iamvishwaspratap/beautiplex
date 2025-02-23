@@ -50,9 +50,14 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void deleteUser(Long id) {
+    public boolean deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            return false; // User not found
+        }
         userRepository.deleteById(id);
+        return true; // User deleted successfully
     }
+
 
     public User findByEmail(String email) {
         User u =userRepository.findUserByEmail(email);
