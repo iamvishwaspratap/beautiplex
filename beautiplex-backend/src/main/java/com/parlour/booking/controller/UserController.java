@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
-import java.beans.Customizer;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,19 +27,16 @@ public class UserController {
     public ResponseEntity<CustomResponse<User>> registerUser(@Valid @RequestBody User user) {
         try {
             User newUser = userService.registerUser(user);
-            CustomResponse<User> customResponse=new CustomResponse<>(newUser,"User creation");
-            return new ResponseEntity<>(customResponse,HttpStatus.OK);
-           // return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+            CustomResponse<User> customResponse = new CustomResponse<>(newUser, "User creation");
+            return new ResponseEntity<>(customResponse, HttpStatus.OK);
         } catch (Exception e) {
-           // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-            CustomResponse<User> customResponse=new CustomResponse<>(null,"Failed to create new user");
-            return new ResponseEntity<>(customResponse,HttpStatus.INTERNAL_SERVER_ERROR);
+            CustomResponse<User> customResponse = new CustomResponse<>(null, "Failed to create new user");
+            return new ResponseEntity<>(customResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody User user) {
-    	System.out.println(user.getId());    //id err
         try {
             User authenticatedUser = userService.authenticateUser(user.getEmail(), user.getPassword(), user.getRole());
             return ResponseEntity.ok(authenticatedUser);
@@ -50,21 +46,13 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<?> getUserDetails(@RequestParam String email){
-        System.out.println("==============================================40000000-----------");
-        System.out.println(email);
+    public ResponseEntity<?> getUserDetails(@RequestParam Long id) {
         try {
-//            User user = userService.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-//            return ResponseEntity.ok(user);
-            User u =userService.findByEmail(email);
-           // User user=optional.get();
-            if(u!=null){
-
-                return ResponseEntity.ok(u);
-
-            }
-            else{
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("not found");
+            User user = userService.findUserById(id);
+            if (user != null) {
+                return ResponseEntity.ok(user);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

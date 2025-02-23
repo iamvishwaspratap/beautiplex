@@ -67,6 +67,10 @@ public class UserService {
         }
         //return userRepository.findByEmail(email);
     }
+    public User getById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
 
     @Transactional
     public void changePassword(String email, String oldPassword, String newPassword) {

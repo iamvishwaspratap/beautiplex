@@ -21,18 +21,18 @@ const OwnerDashboard = () => {
   ]);
 
   const email = localStorage.getItem('userEmail'); // Assuming email is stored in local storage after login
-
+const id = localStorage.getItem('userId'); // Assuming user id is stored in local storage after login
   useEffect(() => {
-    if (!email) {
-      console.error("Email is undefined!");
+    if (!id) {
+      console.error("id is undefined!");
       return;
     }
   
     const fetchOwnerData = async () => {
       try {
-        console.log("Fetching user for email:", email);  // Debugging log
+        console.log("Fetching user for id:", id);  // Debugging log
         const response = await axios.get("http://localhost:8082/api/users/me", { 
-          params: { email } 
+          params: { id: id } 
         });
   
         console.log("API Response:", response.data);  // Debugging log
@@ -43,7 +43,7 @@ const OwnerDashboard = () => {
     };
   
     fetchOwnerData();
-  }, [email]);
+  }, [id]);
   
 
   const handleServiceChange = (index, e) => {
