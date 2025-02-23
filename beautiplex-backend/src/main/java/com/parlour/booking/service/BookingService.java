@@ -1,6 +1,7 @@
 package com.parlour.booking.service;
 
 import com.parlour.booking.model.Booking;
+import com.parlour.booking.model.BookingStatus;
 import com.parlour.booking.repository.BookingRepository;
 import org.springframework.stereotype.Service;
 
@@ -32,18 +33,19 @@ public class BookingService {
     }
 
     public List<Booking> getPendingBookings() {
-        return bookingRepository.findByStatus("PENDING");
+       return bookingRepository.findByStatus("PENDING");
+    //    return null;
     }
 
     public Booking approveBooking(Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow();
-        booking.setStatus("APPROVED");
+        booking.setStatus(BookingStatus.APPROVED);
         return bookingRepository.save(booking);
     }
 
     public Booking denyBooking(Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow();
-        booking.setStatus("DENIED");
+        booking.setStatus(BookingStatus.DENIED);
         return bookingRepository.save(booking);
     }
 

@@ -7,6 +7,7 @@ import com.parlour.booking.model.User;
 import com.parlour.booking.repository.SalonRepository;
 import com.parlour.booking.repository.ServiceRepository;
 import com.parlour.booking.repository.UserRepository;
+import com.parlour.booking.service.SalonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +28,17 @@ public class SalonController {
     private ServiceRepository serviceRepository;
     @Autowired
     private UserRepository userRepository;
-
-    public SalonController() {
+    private final SalonService salonService;
+    public SalonController(SalonService salonService) {
+        this.salonService = salonService;
         System.out.println("🔥 SalonController loaded successfully! 🔥");
     }
+    @GetMapping
+    public ResponseEntity<List<Salon>> getAllSalons() {
+        List<Salon> salons = salonService.getAllSalons();
+        return ResponseEntity.ok(salons);
+    }
+
 
     @GetMapping("/owner")
     public ResponseEntity<?> getSalonsByOwner(@RequestParam Long id) {
@@ -91,5 +99,5 @@ public class SalonController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
-}
 
+}

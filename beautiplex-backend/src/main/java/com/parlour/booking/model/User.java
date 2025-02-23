@@ -77,7 +77,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-
 public class User {
 
     @Id
@@ -97,7 +96,6 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-//    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private String role;
 
@@ -105,21 +103,16 @@ public class User {
     private String resetToken;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    //@JsonIgnoreProperties("owner")
     @JsonIgnore
     private List<Salon> salons = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // ✅ This prevents infinite recursion
     private List<Booking> bookings = new ArrayList<>();
-
-//    public enum Role {
-//        ADMIN, CUSTOMER, SHOP_OWNER
-//    }
 
     public User() {}
 
-    // Getters and Setters
-
+    // ✅ Getters and Setters
     public Long getId() {
         return id;
     }
