@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Container, Row, Col, Card, Spinner, Alert } from "react-bootstrap";
+import { Container, Row, Col, Card, Spinner, Alert, Button, Form } from "react-bootstrap";
 
 const MySalons = () => {
   const [salons, setSalons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [ownerId, setOwnerId] = useState(null);
+  const [editingSalon, setEditingSalon] = useState(null);
+  const [editedSalonData, setEditedSalonData] = useState({ name: "", location: "" });
 
   useEffect(() => {
     const id = localStorage.getItem("ownerId");
-    console.log("Owner ID:", id);
     if (id) {
       setOwnerId(id);
     } else {
@@ -20,33 +21,12 @@ const MySalons = () => {
   }, []);
 
   useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const response = await axios.get("http://localhost:8082/api/users/me", {
-          params: { id: ownerId },
-        });
-        console.log("Current user:", response.data.id);
-        setOwnerId(response.data.id);
-      } catch (error) {
-        console.error("Error fetching current user:", error);
-        setError("Failed to load user data. Please try again.");
-      }
-    };
-
-    if (ownerId) {
-      fetchCurrentUser();
-    }
-  }, [ownerId]);
-
-  useEffect(() => {
     const fetchSalons = async () => {
       if (!ownerId) return;
-      
       try {
         const response = await axios.get("http://localhost:8082/api/salons/owner", {
           params: { id: ownerId },
         });
-        console.log("Salons Data:", response.data);
 
         const salonsWithServices = await Promise.all(
           response.data.map(async (salon) => {
@@ -54,10 +34,8 @@ const MySalons = () => {
               const servicesResponse = await axios.get(
                 `http://localhost:8082/api/services/salon/${salon.id}`
               );
-              console.log(`Services for Salon ${salon.id}:`, servicesResponse.data);
-              return { ...salon, services: Array.isArray(servicesResponse.data) ? servicesResponse.data : [] };
+              return { ...salon, services: servicesResponse.data || [] };
             } catch (error) {
-              console.error(`Error fetching services for salon ${salon.id}:`, error);
               return { ...salon, services: [] };
             }
           })
@@ -65,7 +43,6 @@ const MySalons = () => {
 
         setSalons(salonsWithServices);
       } catch (error) {
-        console.error("Error fetching salons:", error);
         setError("Failed to load salons. Please try again.");
       } finally {
         setLoading(false);
@@ -74,6 +51,32 @@ const MySalons = () => {
 
     fetchSalons();
   }, [ownerId]);
+
+  const handleDelete = async (salonId) => {
+    if (window.confirm("Are you sure you want to delete this salon?")) {
+      try {
+        await axios.delete(`http://localhost:8082/api/salons/delete/${salonId}`);
+        setSalons(salons.filter(salon => salon.id !== salonId));
+      } catch (error) {
+        alert("Failed to delete salon. Please try again.");
+      }
+    }
+  };
+
+  const handleEditClick = (salon) => {
+    setEditingSalon(salon.id);
+    setEditedSalonData({ name: salon.name, location: salon.location });
+  };
+
+  const handleSaveEdit = async (salonId) => {
+    try {
+      await axios.put(`http://localhost:8082/api/salons/update/${salonId}`, editedSalonData);
+      setSalons(salons.map(salon => salon.id === salonId ? { ...salon, ...editedSalonData } : salon));
+      setEditingSalon(null);
+    } catch (error) {
+      alert("Failed to update salon.");
+    }
+  };
 
   return (
     <Container className="mt-4">
@@ -90,10 +93,29 @@ const MySalons = () => {
             <Col md={4} key={salon.id} className="mb-4">
               <Card className="shadow-sm">
                 <Card.Header className="text-center bg-primary text-white">
-                  {salon.name}
+                  {editingSalon === salon.id ? (
+                    <Form.Control
+                      type="text"
+                      value={editedSalonData.name}
+                      onChange={(e) => setEditedSalonData({ ...editedSalonData, name: e.target.value })}
+                    />
+                  ) : (
+                    salon.name
+                  )}
                 </Card.Header>
                 <Card.Body>
-                  <p><strong>Location:</strong> {salon.location}</p>
+                  <p>
+                    <strong>Location:</strong>{" "}
+                    {editingSalon === salon.id ? (
+                      <Form.Control
+                        type="text"
+                        value={editedSalonData.location}
+                        onChange={(e) => setEditedSalonData({ ...editedSalonData, location: e.target.value })}
+                      />
+                    ) : (
+                      salon.location
+                    )}
+                  </p>
                   <p><strong>Services:</strong></p>
                   {Array.isArray(salon.services) && salon.services.length > 0 ? (
                     <ul>
@@ -104,6 +126,19 @@ const MySalons = () => {
                   ) : (
                     <p>No services available</p>
                   )}
+                  <div className="d-flex justify-content-between">
+                    {editingSalon === salon.id ? (
+                      <>
+                        <Button variant="success" onClick={() => handleSaveEdit(salon.id)}>Save</Button>
+                        <Button variant="secondary" onClick={() => setEditingSalon(null)}>Cancel</Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button variant="warning" onClick={() => handleEditClick(salon)}>Edit</Button>
+                        <Button variant="danger" onClick={() => handleDelete(salon.id)}>Delete</Button>
+                      </>
+                    )}
+                  </div>
                 </Card.Body>
               </Card>
             </Col>
