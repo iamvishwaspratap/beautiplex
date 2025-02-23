@@ -18,6 +18,7 @@ import UserManagement from "./components/UserManagement";
 import Appointments from "./components/Appointment";
 import AdminService from "./components/Appointment";
 import MySalons from "./components/MySalons";
+import Booking from "./components/Booking"; // Import Booking
 
 
 const HomePage = () => {
@@ -58,6 +59,7 @@ const App = () => {
         <Route path="/appointments" element={<Appointments />} />
         <Route path="/admin-services" element={<AdminService />} />
         <Route path="/MySalons" element={<MySalons />} />
+        <Route path="/booking" element={<Booking/>} />
         
       </Routes>
       <Footer /> {/* Footer at bottom */}

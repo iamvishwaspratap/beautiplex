@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d0b072fb-5254-4613-9fac-803d35452cef" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/parlour/booking/controller/SalonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/parlour/booking/controller/SalonController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/parlour/booking/controller/ServiceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/parlour/booking/controller/ServiceController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/parlour/booking/controller/SalonController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/parlour/booking/controller/SalonController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/parlour/booking/controller/ServiceController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/parlour/booking/controller/ServiceController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/parlour/booking/model/Salon.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/parlour/booking/model/Salon.class" afterDir="false" />
@@ -18,7 +16,9 @@
       <change beforePath="$PROJECT_DIR$/target/classes/com/parlour/booking/repository/UserRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/parlour/booking/repository/UserRepository.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/parlour/booking/service/SalonService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/parlour/booking/service/SalonService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/parlour/booking/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/parlour/booking/service/UserService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../beautiplex-frontend/src/components/MySalons.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../beautiplex-frontend/src/components/MySalons.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../beautiplex-frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../beautiplex-frontend/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../beautiplex-frontend/src/components/CustomerDashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../beautiplex-frontend/src/components/CustomerDashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../beautiplex-frontend/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../beautiplex-frontend/src/components/Navbar.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

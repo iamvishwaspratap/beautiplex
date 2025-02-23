@@ -82,10 +82,18 @@ const Navbar = ({ setShowLoginModal, setShowRegisterModal }) => {
                   {userRole === "customer" && (
                     <Dropdown.Item onClick={() => navigate("/customer-dashboard")}>Customer Dashboard</Dropdown.Item>
                   )}
+                  {userRole === "customer" && (
+                    <Dropdown.Item onClick={() => navigate("/booking")}>My Bookings</Dropdown.Item>//booking page
+                  )}
                   {userRole === "shop_owner" && (
                     <Dropdown.Item onClick={() => navigate("/owner-dashboard")}>Owner Dashboard</Dropdown.Item>
                   )}
-                  <Dropdown.Item onClick={() => navigate("/MySalons")}>My Salons</Dropdown.Item>
+
+{userRole === "shop_owner" && (
+                    <Dropdown.Item onClick={() => navigate("/MySalons")}>My Salons</Dropdown.Item>
+                  )}
+
+                  
                   <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                   <Dropdown.Item>
                     <button className="btn btn-outline-dark w-100" onClick={toggleMode}>

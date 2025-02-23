@@ -10,11 +10,13 @@ const CustomerDashboard = () => {
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
 
   const email = localStorage.getItem('userEmail'); // Assuming email is stored in local storage after login
+  const id=localStorage.getItem('userId');
 
   useEffect(() => {
     const fetchCustomerData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8082/api/users/me`, { params: { email } });
+        console.log("Fetching user for id:", id);  
+        const response = await axios.get(`http://localhost:8082/api/users/me`, { params: { id:id } });
         setCustomer(response.data);
       } catch (error) {
         console.error('Error fetching customer data:', error);
@@ -22,7 +24,7 @@ const CustomerDashboard = () => {
     };
 
     fetchCustomerData();
-  }, [email]);
+  }, [id]);
 
   if (!customer) {
     return <Spinner animation="border" className="d-block mx-auto mt-4" />;
