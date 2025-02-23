@@ -6,11 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d0b072fb-5254-4613-9fac-803d35452cef" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/parlour/booking/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/parlour/booking/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/parlour/booking/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/parlour/booking/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/parlour/booking/controller/AdminController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/parlour/booking/controller/AdminController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/parlour/booking/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/parlour/booking/controller/UserController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/parlour/booking/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/parlour/booking/service/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/parlour/booking/controller/SalonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/parlour/booking/controller/SalonController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/parlour/booking/controller/SalonController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/parlour/booking/controller/SalonController.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

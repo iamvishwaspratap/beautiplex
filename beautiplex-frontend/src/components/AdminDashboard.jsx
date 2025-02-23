@@ -6,7 +6,8 @@ import ChangePasswordModal from './ChangePasswordModal';
 
 const AdminDashboard = () => {
   const [admin, setAdmin] = useState(null);
-  const [users, setUsers] = useState([]); // State to store all users
+  const [users, setUsers] = useState([]); 
+  const [salons, setSalons] = useState([]); // State for salons
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
@@ -14,7 +15,6 @@ const AdminDashboard = () => {
   const id = localStorage.getItem('userId');
 
   useEffect(() => {
-    // Fetch admin details
     const fetchAdminData = async () => {
       try {
         const response = await axios.get(`http://localhost:8082/api/users/me`, { params: { id } });
@@ -24,13 +24,21 @@ const AdminDashboard = () => {
       }
     };
 
-    // Fetch all registered users
     const fetchUsers = async () => {
       try {
         const response = await axios.get(`http://localhost:8082/api/users/all`);
         setUsers(response.data);
       } catch (error) {
         console.error('Error fetching users:', error);
+      }
+    };
+
+    const fetchSalons = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8082/api/salons`);
+        setSalons(response.data);
+      } catch (error) {
+        console.error('Error fetching salons:', error);
       } finally {
         setLoading(false);
       }
@@ -38,6 +46,7 @@ const AdminDashboard = () => {
 
     fetchAdminData();
     fetchUsers();
+    fetchSalons();
   }, [id]);
 
   // Function to delete a user
@@ -49,6 +58,18 @@ const AdminDashboard = () => {
       setUsers(users.filter(user => user.id !== userId)); // Remove user from state
     } catch (error) {
       console.error('Error deleting user:', error);
+    }
+  };
+
+  // Function to delete a salon (Admin & Owner can delete)
+  const deleteSalon = async (salonId) => {
+    if (!window.confirm('Are you sure you want to delete this salon?')) return;
+
+    try {
+      await axios.delete(`http://localhost:8082/api/salons/delete/${salonId}`);
+      setSalons(salons.filter(salon => salon.id !== salonId)); // Remove salon from state
+    } catch (error) {
+      console.error('Error deleting salon:', error);
     }
   };
 
@@ -121,17 +142,53 @@ const AdminDashboard = () => {
         </Col>
       </Row>
 
-      <EditUserModal
-        show={showEditModal}
-        handleClose={() => setShowEditModal(false)}
-        user={admin}
-        setUser={setAdmin}
-      />
-      <ChangePasswordModal
-        show={showChangePasswordModal}
-        handleClose={() => setShowChangePasswordModal(false)}
-        email={localStorage.getItem('userEmail')}
-      />
+      {/* Salons Table */}
+      <Row className="mt-4">
+        <Col>
+          <Card className="shadow-sm p-3">
+            <Card.Header className="bg-info text-white text-center">
+              <h5>Registered Salons</h5>
+            </Card.Header>
+            <Card.Body>
+              <Table striped bordered hover responsive>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Owner</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {salons.length > 0 ? (
+                    salons.map(salon => (
+                      <tr key={salon.id}>
+                        <td>{salon.id}</td>
+                        <td>{salon.name}</td>
+                        <td>{salon.location}</td>
+                        <td>{salon.owner?.name || "N/A"}</td>
+                        <td>
+                          <Button variant="danger" size="sm" onClick={() => deleteSalon(salon.id)}>
+                            Delete
+                          </Button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5" className="text-center">No salons found.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </Table>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+
+      <EditUserModal show={showEditModal} handleClose={() => setShowEditModal(false)} user={admin} setUser={setAdmin} />
+      <ChangePasswordModal show={showChangePasswordModal} handleClose={() => setShowChangePasswordModal(false)} email={localStorage.getItem('userEmail')} />
     </Container>
   );
 };

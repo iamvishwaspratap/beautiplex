@@ -135,6 +135,8 @@ const CustomerDashboard = () => {
           </Card>
         </Col>
       </Row>
+      <EditUserModal show={showEditModal} handleClose={() => setShowEditModal(false)} user={customer} setUser={setCustomer} />
+      <ChangePasswordModal show={showChangePasswordModal} handleClose={() => setShowChangePasswordModal(false)} email={localStorage.getItem('userEmail')} />
     </Container>
   );
 };

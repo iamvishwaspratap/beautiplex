@@ -5,7 +5,7 @@ import "../styles/Footer.css"
 
 const Footer = () => {
   return (
-    <footer className="bg-dark text-light py-4">
+    <footer className="bg-dark text-light py-4" style={{position:"relative", bottom:"-250px", width:"100%"}}>
       <Container>
         <Row>
           <Col md={3}>
