@@ -27,6 +27,7 @@ const LoginModal = ({ show, handleClose, showRegister }) => {
       .post("http://localhost:8082/api/users/login", user)
       .then((response) => {
         alert("Login successful");
+        localStorage.setItem("ownerId", response.data.id); // Store owner ID in local storage
         console.log(response.data);
         localStorage.setItem("userId", response.data.id); // Store user id in local storage
         localStorage.setItem("userEmail", user.email); // Store email in local storage

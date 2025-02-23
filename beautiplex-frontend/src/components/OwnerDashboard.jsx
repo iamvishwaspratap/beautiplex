@@ -22,28 +22,29 @@ const OwnerDashboard = () => {
 
   const email = localStorage.getItem('userEmail'); // Assuming email is stored in local storage after login
 const id = localStorage.getItem('userId'); // Assuming user id is stored in local storage after login
-  useEffect(() => {
-    if (!id) {
-      console.error("id is undefined!");
-      return;
+useEffect(() => {
+  if (!id) {
+    console.error("id is undefined!");
+    return;  // ✅ Exit if ID is undefined
+  }
+
+  const fetchOwnerData = async () => {
+    try {
+      console.log("Fetching user for id:", id);  
+      const response = await axios.get("http://localhost:8082/api/users/me", { 
+        params: { id: id } 
+      });
+
+      console.log("API Response:", response.data);  
+      setOwner(response.data);
+    } catch (error) {
+      console.error("Error fetching owner data:", error);
     }
-  
-    const fetchOwnerData = async () => {
-      try {
-        console.log("Fetching user for id:", id);  // Debugging log
-        const response = await axios.get("http://localhost:8082/api/users/me", { 
-          params: { id: id } 
-        });
-  
-        console.log("API Response:", response.data);  // Debugging log
-        setOwner(response.data);
-      } catch (error) {
-        console.error("Error fetching owner data:", error);
-      }
-    };
-  
-    fetchOwnerData();
-  }, [id]);
+  };
+
+  fetchOwnerData();
+}, [id]);  // ✅ Closing curly brace properly
+
   
 
   const handleServiceChange = (index, e) => {

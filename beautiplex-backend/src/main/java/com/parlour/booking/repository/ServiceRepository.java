@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface ServiceRepository extends JpaRepository<ServiceEntity, Long> {
 //    List<ServiceEntity> findByAddressContaining(String address);
-//    List<ServiceEntity> findBySalonId(Long salonId);
+    List<ServiceEntity> findBySalonId(Long salonId);
+
 }

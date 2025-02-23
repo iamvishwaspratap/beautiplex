@@ -7,21 +7,26 @@ const MySalons = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [ownerId, setOwnerId] = useState(null);
-  
+
   useEffect(() => {
-    const id = localStorage.getItem('userId');
-     console.log("Owner ID:", id);
-    setOwnerId(id);
+    const id = localStorage.getItem("ownerId");
+    console.log("Owner ID:", id);
+    if (id) {
+      setOwnerId(id);
+    } else {
+      setError("Owner ID not found. Please log in again.");
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
-        const currentUserResponse = await axios.get("http://localhost:8082/api/users/me", {
+        const response = await axios.get("http://localhost:8082/api/users/me", {
           params: { id: ownerId },
         });
-        console.log("Current user:", currentUserResponse.data.id);
-        setOwnerId(currentUserResponse.data.id);
+        console.log("Current user:", response.data.id);
+        setOwnerId(response.data.id);
       } catch (error) {
         console.error("Error fetching current user:", error);
         setError("Failed to load user data. Please try again.");
@@ -33,16 +38,32 @@ const MySalons = () => {
     }
   }, [ownerId]);
 
-
   useEffect(() => {
     const fetchSalons = async () => {
       if (!ownerId) return;
-
+      
       try {
         const response = await axios.get("http://localhost:8082/api/salons/owner", {
           params: { id: ownerId },
         });
-        setSalons(response.data);
+        console.log("Salons Data:", response.data);
+
+        const salonsWithServices = await Promise.all(
+          response.data.map(async (salon) => {
+            try {
+              const servicesResponse = await axios.get(
+                `http://localhost:8082/api/services/salon/${salon.id}`
+              );
+              console.log(`Services for Salon ${salon.id}:`, servicesResponse.data);
+              return { ...salon, services: Array.isArray(servicesResponse.data) ? servicesResponse.data : [] };
+            } catch (error) {
+              console.error(`Error fetching services for salon ${salon.id}:`, error);
+              return { ...salon, services: [] };
+            }
+          })
+        );
+
+        setSalons(salonsWithServices);
       } catch (error) {
         console.error("Error fetching salons:", error);
         setError("Failed to load salons. Please try again.");
@@ -72,23 +93,17 @@ const MySalons = () => {
                   {salon.name}
                 </Card.Header>
                 <Card.Body>
-                  <p>
-                    <strong>Location:</strong> {salon.location}
-                  </p>
-                  <p>
-                    <strong>Services:</strong>
-                  </p>
-                  <ul>
-                    {salon.services && salon.services.length > 0 ? (
-                      salon.services.map((service, index) => (
-                        <li key={index}>
-                          {service.name} - ₹{service.price}
-                        </li>
-                      ))
-                    ) : (
-                      <p>No services available</p>
-                    )}
-                  </ul>
+                  <p><strong>Location:</strong> {salon.location}</p>
+                  <p><strong>Services:</strong></p>
+                  {Array.isArray(salon.services) && salon.services.length > 0 ? (
+                    <ul>
+                      {salon.services.map((service) => (
+                        <li key={service.id}>{service.name} - ₹{service.price}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No services available</p>
+                  )}
                 </Card.Body>
               </Card>
             </Col>
@@ -102,6 +117,3 @@ const MySalons = () => {
 };
 
 export default MySalons;
-
-
-

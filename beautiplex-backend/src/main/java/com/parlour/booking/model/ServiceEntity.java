@@ -57,6 +57,7 @@
 //}
 package com.parlour.booking.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import java.util.ArrayList;
@@ -78,6 +79,7 @@ public class ServiceEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "salon_id", nullable = false)
+    @JsonBackReference
     private Salon salon;
 
 //    @ManyToMany(mappedBy = "services")
