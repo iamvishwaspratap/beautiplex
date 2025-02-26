@@ -1,10 +1,7 @@
 package com.parlour.booking.controller;
 
 import com.parlour.booking.dto.BookingRequest;
-import com.parlour.booking.model.Booking;
-import com.parlour.booking.model.ServiceEntity;
-import com.parlour.booking.model.Salon;
-import com.parlour.booking.model.User;
+import com.parlour.booking.model.*;
 import com.parlour.booking.repository.ServiceRepository;
 import com.parlour.booking.repository.SalonRepository;
 import com.parlour.booking.repository.UserRepository;
@@ -56,6 +53,7 @@ public class BookingController {
             booking.setCustomer(customerOpt.get());
             booking.setSalon(salonOpt.get());
             booking.setServices(selectedServices);
+            booking.setStatus(BookingStatus.PENDING); // Set booking status to PENDING
 
             Booking newBooking = bookingService.createBooking(booking);
             return ResponseEntity.status(HttpStatus.CREATED).body("Booking created successfully with ID: " + newBooking.getId());
@@ -63,11 +61,46 @@ public class BookingController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating booking: " + e.getMessage());
         }
     }
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Booking>> getBookingsByUserId(@PathVariable("userId") Long userId) {
         List<Booking> bookings = bookingService.getBookingsByUserId(userId);
         return ResponseEntity.ok(bookings);
     }
 
+    @PostMapping("/{bookingId}/approve")
+    public ResponseEntity<?> approveBooking(@PathVariable Long bookingId) {
+        try {
+            Booking booking = bookingService.getBookingById(bookingId);
+            if (booking == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Booking not found.");
+            }
+            booking.setStatus(BookingStatus.APPROVED);
+            bookingService.updateBooking(booking);
+            return ResponseEntity.ok("Booking approved.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error approving booking: " + e.getMessage());
+        }
+    }
 
+    @PostMapping("/{bookingId}/deny")
+    public ResponseEntity<?> denyBooking(@PathVariable Long bookingId) {
+        try {
+            Booking booking = bookingService.getBookingById(bookingId);
+            if (booking == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Booking not found.");
+            }
+            booking.setStatus(BookingStatus.DENIED);
+            bookingService.updateBooking(booking);
+            return ResponseEntity.ok("Booking denied.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error denying booking: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/pending/owner/{ownerId}")
+    public ResponseEntity<List<Booking>> getPendingBookingsByOwnerId(@PathVariable("ownerId") Long ownerId) {
+        List<Booking> bookings = bookingService.getPendingBookingsByOwnerId(ownerId);
+        return ResponseEntity.ok(bookings);
+    }
 }

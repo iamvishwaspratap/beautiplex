@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Card, Spinner, Button, Form, Modal } from 'react-bootstrap';
+import { Container, Row, Col, Card, Spinner, Button, Form, Modal, Alert } from 'react-bootstrap';
 import EditUserModal from './EditUserModal';
 import ChangePasswordModal from './ChangePasswordModal';
 
@@ -19,33 +19,58 @@ const OwnerDashboard = () => {
     { name: 'Bridal Makeup', price: '' },
     { name: 'Skincare', price: '' },
   ]);
+  const [pendingBookings, setPendingBookings] = useState([]);
+  const [loadingOwner, setLoadingOwner] = useState(true);
+  const [loadingBookings, setLoadingBookings] = useState(true);
+  const [errorBookings, setErrorBookings] = useState(null);
 
   const email = localStorage.getItem('userEmail'); // Assuming email is stored in local storage after login
-const id = localStorage.getItem('userId'); // Assuming user id is stored in local storage after login
-useEffect(() => {
-  if (!id) {
-    console.error("id is undefined!");
-    return;  // ✅ Exit if ID is undefined
-  }
+  const id = localStorage.getItem('userId'); // Assuming user id is stored in local storage after login
 
-  const fetchOwnerData = async () => {
-    try {
-      console.log("Fetching user for id:", id);  
-      const response = await axios.get("http://localhost:8082/api/users/me", { 
-        params: { id: id } 
-      });
-
-      console.log("API Response:", response.data);  
-      setOwner(response.data);
-    } catch (error) {
-      console.error("Error fetching owner data:", error);
+  useEffect(() => {
+    if (!id) {
+      console.error("id is undefined!");
+      setLoadingOwner(false);
+      return;  // ✅ Exit if ID is undefined
     }
-  };
 
-  fetchOwnerData();
-}, [id]);  // ✅ Closing curly brace properly
+    const fetchOwnerData = async () => {
+      try {
+        console.log("Fetching user for id:", id);  
+        const response = await axios.get("http://localhost:8082/api/users/me", { 
+          params: { id: id } 
+        });
 
-  
+        console.log("API Response:", response.data);  
+        setOwner(response.data);
+      } catch (error) {
+        console.error("Error fetching owner data:", error);
+      } finally {
+        setLoadingOwner(false);
+      }
+    };
+
+    fetchOwnerData();
+  }, [id]);
+
+  useEffect(() => {
+    if (owner && owner.salons && owner.salons.length > 0) {
+      const fetchPendingBookings = async (salonId) => {
+        try {
+          const response = await axios.get(`http://localhost:8082/api/bookings/pending/${salonId}`);
+          setPendingBookings(response.data);
+        } catch (error) {
+          setErrorBookings("Failed to load pending bookings. Please try again.");
+        } finally {
+          setLoadingBookings(false);
+        }
+      };
+
+      fetchPendingBookings(owner.salons[0].id); // Assuming the owner has at least one salon
+    } else {
+      setLoadingBookings(false); // No salons means no bookings to load
+    }
+  }, [owner]);
 
   const handleServiceChange = (index, e) => {
     const { name, value } = e.target;
@@ -113,11 +138,21 @@ useEffect(() => {
         console.error("Error adding salon:", error.response ? error.response.data : error.message);
         alert('Failed to add salon.');
     }
-};
+  };
 
+  const handleBookingApproval = async (bookingId, action) => {
+    try {
+      await axios.post(`http://localhost:8082/api/bookings/${bookingId}/${action}`);
+      setPendingBookings((prevBookings) =>
+        prevBookings.filter(booking => booking.id !== bookingId)
+      );
+    } catch (error) {
+      console.error(`Error ${action === 'approve' ? 'approving' : 'denying'} booking:`, error);
+      alert(`Failed to ${action} booking.`);
+    }
+  };
 
-
-  if (!owner) {
+  if (loadingOwner) {
     return <Spinner animation="border" className="d-block mx-auto mt-4" />;
   }
 
@@ -143,6 +178,42 @@ useEffect(() => {
               </Button>
             </Card.Body>
           </Card>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col>
+          <h3>Pending Bookings</h3>
+          {loadingBookings ? (
+            <Spinner animation="border" />
+          ) : errorBookings ? (
+            <Alert variant="danger">{errorBookings}</Alert>
+          ) : (
+            <Card>
+              <Card.Body>
+                {pendingBookings.length === 0 ? (
+                  <p>No pending bookings.</p>
+                ) : (
+                  <ul>
+                    {pendingBookings.map((booking) => (
+                      <li key={booking.id}>
+                        <p><strong>Booking ID:</strong> {booking.id}</p>
+                        <p><strong>Customer Name:</strong> {booking.customer.name}</p>
+                        <p><strong>Salon:</strong> {booking.salon.name}</p>
+                        <p><strong>Status:</strong> {booking.status}</p>
+                        <Button variant="success" onClick={() => handleBookingApproval(booking.id, 'approve')} className="me-2">
+                          Approve
+                        </Button>
+                        <Button variant="danger" onClick={() => handleBookingApproval(booking.id, 'deny')}>
+                          Deny
+                        </Button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </Card.Body>
+            </Card>
+          )}
         </Col>
       </Row>
 
