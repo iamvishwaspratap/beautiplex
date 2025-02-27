@@ -41,8 +41,8 @@ const Bookings = () => {
           <thead>
             <tr>
               <th>Booking ID</th>
-              <th>Customer Name</th>
-              <th>Customer Email</th>
+              <th>Salon Name</th>
+              <th>Salon Location</th>
               <th>Status</th>
             </tr>
           </thead>
@@ -50,8 +50,8 @@ const Bookings = () => {
             {bookings.map((booking) => (
               <tr key={booking.id}>
                 <td>{booking.id}</td>
-                <td>{booking.customer?.name}</td>
-                <td>{booking.customer?.email}</td>
+                <td>{booking.salon?.name}</td>
+                <td>{booking.salon?.location}</td>
                 <td>{booking.status}</td>
               </tr>
             ))}

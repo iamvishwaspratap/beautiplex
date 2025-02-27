@@ -6,13 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d0b072fb-5254-4613-9fac-803d35452cef" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/parlour/booking/controller/BookingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/parlour/booking/controller/BookingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/parlour/booking/repository/BookingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/parlour/booking/repository/BookingRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/parlour/booking/service/BookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/parlour/booking/service/BookingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/parlour/booking/controller/BookingController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/parlour/booking/controller/BookingController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/parlour/booking/repository/BookingRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/parlour/booking/repository/BookingRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/parlour/booking/service/BookingService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/parlour/booking/service/BookingService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../beautiplex-frontend/src/components/Booking.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../beautiplex-frontend/src/components/Booking.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../beautiplex-frontend/src/components/OwnerDashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../beautiplex-frontend/src/components/OwnerDashboard.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -41,16 +34,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.BeautiPlexBackendApplication.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/Cdac/BeautiPlexGit5/beautiplex/beautiplex-backend"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.BeautiPlexBackendApplication.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Cdac/BeautiPlexGit5/beautiplex/beautiplex-backend&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.parlour.booking.model" />

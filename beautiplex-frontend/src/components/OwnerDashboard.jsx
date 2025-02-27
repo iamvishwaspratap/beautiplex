@@ -41,7 +41,7 @@ const OwnerDashboard = () => {
           params: { id: id } 
         });
 
-        console.log("API Response:", response.data);  
+         console.log("API Response:", response.data);  //remove this line  
         setOwner(response.data);
       } catch (error) {
         console.error("Error fetching owner data:", error);
@@ -54,23 +54,29 @@ const OwnerDashboard = () => {
   }, [id]);
 
   useEffect(() => {
-    if (owner && owner.salons && owner.salons.length > 0) {
-      const fetchPendingBookings = async (salonId) => {
-        try {
-          const response = await axios.get(`http://localhost:8082/api/bookings/pending/${salonId}`);
-          setPendingBookings(response.data);
-        } catch (error) {
-          setErrorBookings("Failed to load pending bookings. Please try again.");
-        } finally {
-          setLoadingBookings(false);
-        }
-      };
-
-      fetchPendingBookings(owner.salons[0].id); // Assuming the owner has at least one salon
-    } else {
-      setLoadingBookings(false); // No salons means no bookings to load
+    if (!owner || !owner.id) {
+      console.log("Owner data is not available yet:", owner);
+      return;
     }
+  
+    const fetchPendingBookings = async () => {
+      console.log("Fetching pending bookings for owner ID:", owner.id);
+      try {
+        const response = await axios.get(`http://localhost:8082/api/bookings/pending/owner/${owner.id}`);
+        console.log("Bookings fetched:", response.data);
+        setPendingBookings(response.data);
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+        setErrorBookings("Failed to load pending bookings. Please try again.");
+      } finally {
+        setLoadingBookings(false);
+      }
+    };
+  
+    fetchPendingBookings();
   }, [owner]);
+  
+  
 
   const handleServiceChange = (index, e) => {
     const { name, value } = e.target;
