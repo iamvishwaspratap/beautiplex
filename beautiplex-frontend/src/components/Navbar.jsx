@@ -10,7 +10,7 @@ const Navbar = ({ setShowLoginModal, setShowRegisterModal }) => {
   const isLoggedIn = localStorage.getItem("userEmail"); // Check if user is logged in
   const userName = localStorage.getItem("userName"); // Assuming user name is stored in local storage after login
   const userRole = localStorage.getItem("userRole"); // Assuming user role is stored in local storage after login
-  const userInitials = userName ? userName.split(' ').map(name => name[0]).join('') : '';
+  const userInitials =  userName;
 
   // toggle function
   const toggleMode = () => {
@@ -74,11 +74,12 @@ const Navbar = ({ setShowLoginModal, setShowRegisterModal }) => {
             </li>
             {isLoggedIn ? (
               <Dropdown align="end">
-                <Dropdown.Toggle variant="secondary" id="dropdown-basic" className="profile-dropdown">
+                <Dropdown.Toggle variant="secondary" id="dropdown-basic" className="profile-dropdown px-4 "style={{background: "rgb(2,0,36)",
+background: "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(140,35,66,1) 0%, rgba(172,21,87,1) 32%, rgba(255,0,95,1) 96%)", border:"none"}}>
                   {userInitials}
                 </Dropdown.Toggle>
 
-                <Dropdown.Menu>
+                <Dropdown.Menu >
                   {userRole === "customer" && (
                     <Dropdown.Item onClick={() => navigate("/customer-dashboard")}>Customer Dashboard</Dropdown.Item>
                   )}

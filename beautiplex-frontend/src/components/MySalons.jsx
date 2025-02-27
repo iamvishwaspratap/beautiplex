@@ -55,7 +55,8 @@ const MySalons = () => {
   const handleDelete = async (salonId) => {
     if (window.confirm("Are you sure you want to delete this salon?")) {
       try {
-        await axios.delete(`http://localhost:8082/api/salons/delete/${salonId}`);
+        const userId = localStorage.getItem("ownerId");
+        await axios.delete(`http://localhost:8082/api/salons/delete/${salonId}`,{params: {userId }});
         setSalons(salons.filter(salon => salon.id !== salonId));
       } catch (error) {
         alert("Failed to delete salon. Please try again.");

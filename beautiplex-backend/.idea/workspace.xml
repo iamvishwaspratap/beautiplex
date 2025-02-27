@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d0b072fb-5254-4613-9fac-803d35452cef" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../beautiplex-frontend/src/components/OwnerDashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../beautiplex-frontend/src/components/OwnerDashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../beautiplex-frontend/src/components/AdminDashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../beautiplex-frontend/src/components/AdminDashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../beautiplex-frontend/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../beautiplex-frontend/src/components/Navbar.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -12,7 +12,8 @@ const AdminDashboard = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
 
-  const id = localStorage.getItem('userId');
+  const id = Number(localStorage.getItem('userId'));
+  const userId = Number(localStorage.getItem('userId'));
 
   useEffect(() => {
     const fetchAdminData = async () => {
@@ -27,11 +28,14 @@ const AdminDashboard = () => {
     const fetchUsers = async () => {
       try {
         const response = await axios.get(`http://localhost:8082/api/users/all`);
-        setUsers(response.data);
+        // Filter out the current admin
+        const filteredUsers = response.data.filter(user => user.id !== id);
+        setUsers(filteredUsers);
       } catch (error) {
         console.error('Error fetching users:', error);
       }
     };
+    
 
     const fetchSalons = async () => {
       try {
@@ -66,7 +70,7 @@ const AdminDashboard = () => {
     if (!window.confirm('Are you sure you want to delete this salon?')) return;
 
     try {
-      await axios.delete(`http://localhost:8082/api/salons/delete/${salonId}`);
+      await axios.delete(`http://localhost:8082/api/salons/delete/${salonId}`,{params: { userId }});
       setSalons(salons.filter(salon => salon.id !== salonId)); // Remove salon from state
     } catch (error) {
       console.error('Error deleting salon:', error);
