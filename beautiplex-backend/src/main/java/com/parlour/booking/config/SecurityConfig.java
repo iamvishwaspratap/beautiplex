@@ -23,9 +23,9 @@ public class SecurityConfig {
             .csrf().disable(); // Disable CSRF protection (optional)
         return http.build();
     }
-    
+
     @Bean
-     PasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

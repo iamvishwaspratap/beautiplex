@@ -74,8 +74,8 @@ const Navbar = ({ setShowLoginModal, setShowRegisterModal }) => {
             </li>
             {isLoggedIn ? (
               <Dropdown align="end">
-                <Dropdown.Toggle variant="secondary" id="dropdown-basic" className="profile-dropdown px-4 "style={{background: "rgb(2,0,36)",
-background: "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(140,35,66,1) 0%, rgba(172,21,87,1) 32%, rgba(255,0,95,1) 96%)", border:"none"}}>
+                <Dropdown.Toggle variant="secondary" id="dropdown-basic" className="profile-dropdown px-4 "style={{backgroundColor: "rgb(2,0,36)",
+backgroundImage: "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(140,35,66,1) 0%, rgba(172,21,87,1) 32%, rgba(255,0,95,1) 96%)", border:"none"}}>
                   {userInitials}
                 </Dropdown.Toggle>
 
